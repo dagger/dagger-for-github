@@ -30,7 +30,7 @@ name: dagger
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:

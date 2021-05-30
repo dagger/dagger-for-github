@@ -5,13 +5,13 @@ on:
     - cron: '0 10 * * *' # everyday at 10am
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'releases/v*'
     tags:
       - 'v*'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
       - 'releases/v*'
 
 jobs:
