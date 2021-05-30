@@ -1,7 +1,6 @@
-# https://help.github.com/en/articles/metadata-syntax-for-github-actions
 name: 'Dagger Action'
 description: 'GitHub Action for Dagger, a programmable deployment system'
-author: 'crazy-max'
+author: 'dagger'
 branding:
   color: 'green'
   icon: 'package'

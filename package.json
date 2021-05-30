@@ -11,14 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/crazy-max/dagger-action.git"
+    "url": "git+https://github.com/dagger/dagger-action.git"
   },
   "keywords": [
     "actions",
     "dagger"
   ],
-  "author": "CrazyMax",
-  "license": "MIT",
+  "author": "Dagger",
+  "contributors": [
+    {
+      "name": "CrazyMax",
+      "url": "https://crazymax.dev"
+    }
+  ],
+  "license": "Apache-2.0",
   "dependencies": {
     "@actions/core": "^1.3.0",
     "@actions/exec": "^1.0.4",
