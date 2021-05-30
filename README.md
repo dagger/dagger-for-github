@@ -9,6 +9,8 @@
 
 GitHub Action for [Dagger](https://dagger.io), a programmable deployment system.
 
+![Screenshot](.github/dagger-action.png)
+
 ___
 
 * [Usage](#usage)
