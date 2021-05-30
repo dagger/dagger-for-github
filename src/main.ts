@@ -34,7 +34,7 @@ async function run(): Promise<void> {
       process.chdir(inputs.workdir);
     }
 
-    await exec.exec(`${daggerBin} ${inputs.args}`);
+    await exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
   } catch (error) {
     core.setFailed(error.message);
   }

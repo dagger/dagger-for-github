@@ -214,7 +214,7 @@ function run() {
                 core.info(`Using ${inputs.workdir} as working directory`);
                 process.chdir(inputs.workdir);
             }
-            yield exec.exec(`${daggerBin} ${inputs.args}`);
+            yield exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
         }
         catch (error) {
             core.setFailed(error.message);
