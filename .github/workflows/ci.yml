@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # everyday at 10am
+  push:
+    branches:
+      - 'master'
+      - 'releases/v*'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'master'
+      - 'releases/v*'
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
+        version:
+          - latest
+          - 0.1.0-alpha.9
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Init env
+        run: |
+          mkdir ~/.dagger
+          cp ./test/keys.txt ~/.dagger/
+      -
+        name: Check
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          args: query
+          workdir: ./test
+      -
+        name: Dagger
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          args: up --no-cache
+          workdir: ./test
+
+  install-only:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - latest
+          - 0.1.0-alpha.9
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Init env
+        run: |
+          mkdir ~/.dagger
+          cp ./test/keys.txt ~/.dagger/
+      -
+        name: Dagger
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+          install-only: true
+      -
+        name: Check
+        run: |
+          dagger version
