@@ -16,14 +16,10 @@ on:
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
         version:
           - latest
           - 0.1.0-alpha.9
@@ -36,13 +32,6 @@ jobs:
         run: |
           mkdir ~/.dagger
           cp ./test/keys.txt ~/.dagger/
-      -
-        name: Check
-        uses: ./
-        with:
-          version: ${{ matrix.version }}
-          args: query
-          workdir: ./test
       -
         name: Dagger
         uses: ./
