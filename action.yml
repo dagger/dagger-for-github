@@ -1,0 +1,31 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+name: 'Dagger Action'
+description: 'GitHub Action for Dagger, a programmable deployment system'
+author: 'crazy-max'
+branding:
+  color: 'green'
+  icon: 'package'
+
+inputs:
+  version:
+    description: 'Dagger version'
+    default: 'latest'
+    required: false
+  age-key:
+    description: 'Dagger private key'
+    required: false
+  args:
+    description: 'Arguments to pass to Dagger'
+    required: false
+  workdir:
+    description: 'Working directory (below repository root)'
+    default: '.'
+    required: false
+  install-only:
+    description: 'Just install Dagger'
+    default: 'false'
+    required: false
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

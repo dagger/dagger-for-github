@@ -1,0 +1,21 @@
+name: staging
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ldpnwlxnru3vpgnjvfny8g54jeweps6msv8hyckwcj3faju4g4psrwr37a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA5OVN1b3g3V1l5NytJSDRj
+            UTNPTDM1ei81cWtqdmh6RXljK1VhRWxnUG1FCjYrUzBlYmRkeGhQR1dERnJCVGtK
+            WTlhMk8wNnVmbUo1cVlzcmJkV3lZR1EKLS0tIFgrZXBFWVNmMVA3b1N5VlZGQzBU
+            UEdWcXQ2SW0xY01aanI1Yk1UTEZRdjgKfjibyF28JAblL9QtldQ3XHQ8ddHhVm9o
+            Q0DY34QpP1Pa8RMd9qg3/WHIQcVcC328VX+JoiOB+CCLyjrX0pyPnw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-05-30T04:47:50Z"
+    mac: ENC[AES256_GCM,data:RVbdCv/3hPv3oSFCOLl7Xe3pdF9C/Uu/S7s8f35opKKK/qGX9xzFADMwjiirIpwU4BENhDFBD8jcmJj1LORd5x/jp5PY5yfq3ueppzqkZjplaP7bHxTT1/TaA2EkChBZb/Uvl18SkuZlwCnFl8s/y2mtS67WFFwdJK5wzEu0cbw=,iv:Lc3qnIYGJaIDy8hdTgC36Cun9uW7AealV4S/mln/d1c=,tag:nzCqihSut0jiAZ5uInz7MA==,type:str]
+    pgp: []
+    encrypted_suffix: secret
+    version: 3.7.1
