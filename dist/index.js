@@ -45,7 +45,8 @@ function getInputs() {
             ageKey: core.getInput('age-key'),
             workdir: core.getInput('workdir') || '.',
             args: core.getInput('args'),
-            installOnly: core.getBooleanInput('install-only')
+            installOnly: core.getBooleanInput('install-only'),
+            cleanup: core.getBooleanInput('cleanup')
         };
     });
 }
@@ -186,6 +187,7 @@ const path_1 = __importDefault(__webpack_require__(622));
 const os_1 = __importDefault(__webpack_require__(87));
 const context = __importStar(__webpack_require__(842));
 const dagger = __importStar(__webpack_require__(113));
+const stateHelper = __importStar(__webpack_require__(647));
 const core = __importStar(__webpack_require__(186));
 const exec = __importStar(__webpack_require__(514));
 function run() {
@@ -214,6 +216,7 @@ function run() {
                 core.info(`Using ${inputs.workdir} as working directory`);
                 process.chdir(inputs.workdir);
             }
+            stateHelper.setCleanup(inputs.cleanup);
             yield exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
         }
         catch (error) {
@@ -221,8 +224,62 @@ function run() {
         }
     });
 }
-run();
+function cleanup() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!stateHelper.cleanup) {
+            return;
+        }
+        core.info(`Removing ${path_1.default.join(os_1.default.homedir(), '.dagger')}`);
+        fs_1.default.rmdirSync(path_1.default.join(os_1.default.homedir(), '.dagger'), { recursive: true });
+    });
+}
+if (!stateHelper.IsPost) {
+    run();
+}
+else {
+    cleanup();
+}
 //# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ 647:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.setCleanup = exports.cleanup = exports.IsPost = void 0;
+const core = __importStar(__webpack_require__(186));
+exports.IsPost = !!process.env['STATE_isPost'];
+exports.cleanup = /true/i.test(process.env['STATE_cleanup'] || '');
+function setCleanup(cleanup) {
+    core.saveState('cleanup', cleanup);
+}
+exports.setCleanup = setCleanup;
+if (!exports.IsPost) {
+    core.saveState('isPost', 'true');
+}
+//# sourceMappingURL=state-helper.js.map
 
 /***/ }),
 

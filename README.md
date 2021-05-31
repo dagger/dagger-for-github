@@ -74,6 +74,7 @@ Following inputs can be used as `step.with` keys
 | `args`           | String  |              | Arguments to pass to Dagger                                      |
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
 | `install-only`   | Bool    | `false`      | Just install Dagger                                              |
+| `cleanup`        | Bool    | `true`       | Cleanup Dagger home folder at the end of a job                   |
 
 ## Development
 
