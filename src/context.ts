@@ -6,6 +6,7 @@ export interface Inputs {
   workdir: string;
   args: string;
   installOnly: boolean;
+  cleanup: boolean;
 }
 
 export async function getInputs(): Promise<Inputs> {
@@ -14,6 +15,7 @@ export async function getInputs(): Promise<Inputs> {
     ageKey: core.getInput('age-key'),
     workdir: core.getInput('workdir') || '.',
     args: core.getInput('args'),
-    installOnly: core.getBooleanInput('install-only')
+    installOnly: core.getBooleanInput('install-only'),
+    cleanup: core.getBooleanInput('cleanup')
   };
 }
