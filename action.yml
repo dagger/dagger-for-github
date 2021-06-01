@@ -24,7 +24,12 @@ inputs:
     description: 'Just install Dagger'
     default: 'false'
     required: false
+  cleanup:
+    description: 'Cleanup Dagger home folder at the end of a job'
+    default: 'true'
+    required: false
 
 runs:
   using: 'node12'
   main: 'dist/index.js'
+  post: 'dist/index.js'

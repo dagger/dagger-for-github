@@ -3,6 +3,7 @@ import path from 'path';
 import os from 'os';
 import * as context from './context';
 import * as dagger from './dagger';
+import * as stateHelper from './state-helper';
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 
@@ -34,10 +35,23 @@ async function run(): Promise<void> {
       process.chdir(inputs.workdir);
     }
 
+    stateHelper.setCleanup(inputs.cleanup);
     await exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
   } catch (error) {
     core.setFailed(error.message);
   }
 }
 
-run();
+async function cleanup(): Promise<void> {
+  if (!stateHelper.cleanup) {
+    return;
+  }
+  core.info(`Removing ${path.join(os.homedir(), '.dagger')}`);
+  fs.rmdirSync(path.join(os.homedir(), '.dagger'), {recursive: true});
+}
+
+if (!stateHelper.IsPost) {
+  run();
+} else {
+  cleanup();
+}
