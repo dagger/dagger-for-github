@@ -15,7 +15,7 @@ on:
       - 'releases/v*'
 
 jobs:
-  ci:
+  version:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -37,6 +37,21 @@ jobs:
         uses: ./
         with:
           version: ${{ matrix.version }}
+          args: up --no-cache
+          workdir: ./test
+
+  age-secret:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Dagger
+        uses: ./
+        with:
+          age-key: ${{ secrets.DAGGER_AGE_KEY_TEST }}
           args: up --no-cache
           workdir: ./test
 
