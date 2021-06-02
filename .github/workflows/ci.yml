@@ -22,7 +22,7 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.9
+          - 0.1.0-alpha.10
     steps:
       -
         name: Checkout
@@ -30,8 +30,8 @@ jobs:
       -
         name: Init env
         run: |
-          mkdir ~/.dagger
-          cp ./test/keys.txt ~/.dagger/
+          mkdir -p ~/.config/dagger
+          cp ./test/keys.txt ~/.config/dagger/
       -
         name: Dagger
         uses: ./
@@ -62,7 +62,7 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.9
+          - 0.1.0-alpha.10
     steps:
       -
         name: Checkout
@@ -70,8 +70,8 @@ jobs:
       -
         name: Init env
         run: |
-          mkdir ~/.dagger
-          cp ./test/keys.txt ~/.dagger/
+          mkdir ~/.config/dagger
+          cp ./test/keys.txt ~/.config/dagger/
       -
         name: Dagger
         uses: ./
