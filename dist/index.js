@@ -206,10 +206,10 @@ function run() {
             }
             if (inputs.ageKey) {
                 yield core.group(`Import Dagger private key`, () => __awaiter(this, void 0, void 0, function* () {
-                    if (!fs_1.default.existsSync(path_1.default.join(os_1.default.homedir(), '.dagger'))) {
-                        fs_1.default.mkdirSync(path_1.default.join(os_1.default.homedir(), '.dagger'), { recursive: true });
+                    if (!fs_1.default.existsSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'))) {
+                        fs_1.default.mkdirSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'), { recursive: true });
                     }
-                    yield fs_1.default.writeFileSync(path_1.default.join(os_1.default.homedir(), '.dagger', 'keys.txt'), inputs.ageKey);
+                    yield fs_1.default.writeFileSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
                 }));
             }
             if (inputs.workdir && inputs.workdir !== '.') {
@@ -229,8 +229,8 @@ function cleanup() {
         if (!stateHelper.cleanup) {
             return;
         }
-        core.info(`Removing ${path_1.default.join(os_1.default.homedir(), '.dagger')}`);
-        fs_1.default.rmdirSync(path_1.default.join(os_1.default.homedir(), '.dagger'), { recursive: true });
+        core.info(`Removing ${path_1.default.join(os_1.default.homedir(), '.config', 'dagger')}`);
+        fs_1.default.rmdirSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'), { recursive: true });
     });
 }
 if (!stateHelper.IsPost) {

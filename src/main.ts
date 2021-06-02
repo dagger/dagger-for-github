@@ -23,10 +23,10 @@ async function run(): Promise<void> {
 
     if (inputs.ageKey) {
       await core.group(`Import Dagger private key`, async () => {
-        if (!fs.existsSync(path.join(os.homedir(), '.dagger'))) {
-          fs.mkdirSync(path.join(os.homedir(), '.dagger'), {recursive: true});
+        if (!fs.existsSync(path.join(os.homedir(), '.config', 'dagger'))) {
+          fs.mkdirSync(path.join(os.homedir(), '.config', 'dagger'), {recursive: true});
         }
-        await fs.writeFileSync(path.join(os.homedir(), '.dagger', 'keys.txt'), inputs.ageKey);
+        await fs.writeFileSync(path.join(os.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
       });
     }
 
@@ -46,8 +46,8 @@ async function cleanup(): Promise<void> {
   if (!stateHelper.cleanup) {
     return;
   }
-  core.info(`Removing ${path.join(os.homedir(), '.dagger')}`);
-  fs.rmdirSync(path.join(os.homedir(), '.dagger'), {recursive: true});
+  core.info(`Removing ${path.join(os.homedir(), '.config', 'dagger')}`);
+  fs.rmdirSync(path.join(os.homedir(), '.config', 'dagger'), {recursive: true});
 }
 
 if (!stateHelper.IsPost) {
