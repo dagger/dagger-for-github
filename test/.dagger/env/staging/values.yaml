@@ -1,3 +1,5 @@
+plan:
+    module: .dagger/env/staging/plan
 name: staging
 sops:
     kms: []
@@ -14,8 +16,8 @@ sops:
             UEdWcXQ2SW0xY01aanI1Yk1UTEZRdjgKfjibyF28JAblL9QtldQ3XHQ8ddHhVm9o
             Q0DY34QpP1Pa8RMd9qg3/WHIQcVcC328VX+JoiOB+CCLyjrX0pyPnw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-05-30T04:47:50Z"
-    mac: ENC[AES256_GCM,data:RVbdCv/3hPv3oSFCOLl7Xe3pdF9C/Uu/S7s8f35opKKK/qGX9xzFADMwjiirIpwU4BENhDFBD8jcmJj1LORd5x/jp5PY5yfq3ueppzqkZjplaP7bHxTT1/TaA2EkChBZb/Uvl18SkuZlwCnFl8s/y2mtS67WFFwdJK5wzEu0cbw=,iv:Lc3qnIYGJaIDy8hdTgC36Cun9uW7AealV4S/mln/d1c=,tag:nzCqihSut0jiAZ5uInz7MA==,type:str]
+    lastmodified: "2021-06-28T17:13:50Z"
+    mac: ENC[AES256_GCM,data:oDMVw6N8dN3l69RODf9OlbwGsVzTe9sTZ0DBOsXlM22xRACub6NnMrOsru23dffYKnLX6J44gPd9XNK4YhwUobPpmcjJtRmnwKtnE2TiOxlhWMr+xI7j7anJgeMLfAO+1Dk/SVJcRoycv43K0thiaasVDJjorqy/nz+lkP7MeTU=,iv:oHZdLMNNLyxd+psdOUPzjJjpQ8/u2TX+IMKqq0G4a9c=,tag:n3xXv3brzQxp6QdfdEA6aA==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1

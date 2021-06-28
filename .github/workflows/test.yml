@@ -6,9 +6,6 @@ on:
       - 'main'
       - 'releases/v*'
   pull_request:
-    branches:
-      - 'main'
-      - 'releases/v*'
 
 jobs:
   test:
