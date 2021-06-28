@@ -10,9 +10,6 @@ on:
     tags:
       - 'v*'
   pull_request:
-    branches:
-      - 'main'
-      - 'releases/v*'
 
 jobs:
   version:
@@ -22,7 +19,7 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.10
+          - 0.1.0-alpha.17
     steps:
       -
         name: Checkout
@@ -62,7 +59,7 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.10
+          - 0.1.0-alpha.17
     steps:
       -
         name: Checkout

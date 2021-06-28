@@ -1,8 +1,8 @@
 package main
 
 import (
-    "dagger.io/docker"
-    "dagger.io/git"
+    "alpha.dagger.io/docker"
+    "alpha.dagger.io/git"
 )
 
 // Relay for fetching a git repository
