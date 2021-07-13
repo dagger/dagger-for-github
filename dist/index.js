@@ -96,7 +96,7 @@ const util = __importStar(__webpack_require__(669));
 const core = __importStar(__webpack_require__(186));
 const http = __importStar(__webpack_require__(925));
 const tc = __importStar(__webpack_require__(784));
-const s3URL = 'https://dagger-io.s3.amazonaws.com/dagger';
+const s3URL = 'https://dl.dagger.io/dagger';
 const osPlat = os.platform();
 const osArch = os.arch();
 function install(version) {
