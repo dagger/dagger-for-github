@@ -36,7 +36,7 @@ async function run(): Promise<void> {
     }
 
     stateHelper.setCleanup(inputs.cleanup);
-    await exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
+    await exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
   } catch (error) {
     core.setFailed(error.message);
   }

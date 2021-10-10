@@ -217,7 +217,7 @@ function run() {
                 process.chdir(inputs.workdir);
             }
             stateHelper.setCleanup(inputs.cleanup);
-            yield exec.exec(`${daggerBin} ${inputs.args} --log-format pretty`);
+            yield exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
         }
         catch (error) {
             core.setFailed(error.message);
