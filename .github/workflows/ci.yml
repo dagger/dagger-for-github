@@ -19,7 +19,7 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.27
+          - 0.1.0-alpha.31
     steps:
       -
         name: Checkout
