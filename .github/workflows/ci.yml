@@ -80,7 +80,7 @@ jobs:
         run: |
           dagger version
 
-  install-only-age-key:
+  install-age-key:
     runs-on: ubuntu-latest
     steps:
       -
@@ -91,7 +91,9 @@ jobs:
         uses: ./
         with:
           age-key: ${{ secrets.DAGGER_AGE_KEY_TEST }}
-          install-only: true
+          # install-only: true
+          args: up --no-cache
+          workdir: ./test
       -
         name: Check
         run: |
