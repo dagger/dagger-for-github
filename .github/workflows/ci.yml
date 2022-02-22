@@ -79,3 +79,20 @@ jobs:
         name: Check
         run: |
           dagger version
+
+  install-only-age-key:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Dagger
+        uses: ./
+        with:
+          age-key: ${{ secrets.DAGGER_AGE_KEY_TEST }}
+          install-only: true
+      -
+        name: Check
+        run: |
+          dagger input list --project ./test

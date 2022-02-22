@@ -195,6 +195,14 @@ function run() {
         try {
             const inputs = yield context.getInputs();
             const daggerBin = yield dagger.install(inputs.version);
+            if (inputs.ageKey) {
+                yield core.group(`Import Dagger private key`, () => __awaiter(this, void 0, void 0, function* () {
+                    if (!fs_1.default.existsSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'))) {
+                        fs_1.default.mkdirSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'), { recursive: true });
+                    }
+                    yield fs_1.default.writeFileSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
+                }));
+            }
             if (inputs.installOnly) {
                 const daggerDir = path_1.default.dirname(daggerBin);
                 core.addPath(daggerDir);
@@ -203,14 +211,6 @@ function run() {
             }
             else if (!inputs.args) {
                 throw new Error('args input required');
-            }
-            if (inputs.ageKey) {
-                yield core.group(`Import Dagger private key`, () => __awaiter(this, void 0, void 0, function* () {
-                    if (!fs_1.default.existsSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'))) {
-                        fs_1.default.mkdirSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'), { recursive: true });
-                    }
-                    yield fs_1.default.writeFileSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
-                }));
             }
             if (inputs.workdir && inputs.workdir !== '.') {
                 core.info(`Using ${inputs.workdir} as working directory`);

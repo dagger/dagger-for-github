@@ -49,17 +49,22 @@ jobs:
 
 ### Install Only
 
+The `age-key` located in your `~/.config/dagger/keys.txt` decrypts your locally encrypted secrets
+
 ```yaml
 steps:
   -
     name: Install Dagger
     uses: dagger/dagger-action@v1
     with:
+      age-key: ${{ secrets.DAGGER_AGE_KEY_TEST }} (optional, but mandatory to interact with inputs)
       install-only: true
   -
     name: Show Dagger version
     run: dagger version
 ```
+
+Add this key as a Github Secret (`DAGGER_AGE_KEY_TEST` in the example above) to allow your CI to interact with your locally encrypted inputs
 
 ## Customizing
 
@@ -75,6 +80,8 @@ Following inputs can be used as `step.with` keys
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
 | `install-only`   | Bool    | `false`      | Just install Dagger                                              |
 | `cleanup`        | Bool    | `true`       | Cleanup Dagger home folder at the end of a job                   |
+
+All the keys above have to be used in conjunction with the `args` key, except `install-only` that may be used standalone or in combination with `age-key` (cf. example above)
 
 ## Development
 

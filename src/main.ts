@@ -12,15 +12,6 @@ async function run(): Promise<void> {
     const inputs: context.Inputs = await context.getInputs();
     const daggerBin = await dagger.install(inputs.version);
 
-    if (inputs.installOnly) {
-      const daggerDir = path.dirname(daggerBin);
-      core.addPath(daggerDir);
-      core.debug(`Added ${daggerDir} to PATH`);
-      return;
-    } else if (!inputs.args) {
-      throw new Error('args input required');
-    }
-
     if (inputs.ageKey) {
       await core.group(`Import Dagger private key`, async () => {
         if (!fs.existsSync(path.join(os.homedir(), '.config', 'dagger'))) {
@@ -28,6 +19,15 @@ async function run(): Promise<void> {
         }
         await fs.writeFileSync(path.join(os.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
       });
+    }
+
+    if (inputs.installOnly) {
+      const daggerDir = path.dirname(daggerBin);
+      core.addPath(daggerDir);
+      core.debug(`Added ${daggerDir} to PATH`);
+      return;
+    } else if (!inputs.args) {
+      throw new Error('args input required');
     }
 
     if (inputs.workdir && inputs.workdir !== '.') {
