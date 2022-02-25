@@ -1,5 +1,5 @@
 {
-  "name": "dagger-action",
+  "name": "dagger-for-github",
   "description": "GitHub Action for Dagger, a programmable deployment system",
   "main": "lib/main.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dagger/dagger-action.git"
+    "url": "git+https://github.com/dagger/dagger-for-github.git"
   },
   "keywords": [
     "actions",
