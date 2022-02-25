@@ -39,7 +39,7 @@ export async function install(version: string): Promise<string> {
 }
 
 async function getLatestVersion(): Promise<string> {
-  const _http = new http.HttpClient('dagger-action');
+  const _http = new http.HttpClient('dagger-for-github');
   const res = await _http.get(`${s3URL}/latest_version`);
   return await res.readBody().then(body => {
     return body.trim();

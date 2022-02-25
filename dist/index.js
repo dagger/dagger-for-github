@@ -128,7 +128,7 @@ function install(version) {
 exports.install = install;
 function getLatestVersion() {
     return __awaiter(this, void 0, void 0, function* () {
-        const _http = new http.HttpClient('dagger-action');
+        const _http = new http.HttpClient('dagger-for-github');
         const res = yield _http.get(`${s3URL}/latest_version`);
         return yield res.readBody().then(body => {
             return body.trim();
