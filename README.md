@@ -1,15 +1,15 @@
 ![Dagger](.github/dagger.png)
 
-[![GitHub release](https://img.shields.io/github/release/dagger/dagger-action.svg?style=flat-square)](https://github.com/dagger/dagger-action/releases/latest)
-[![GitHub marketplace](https://img.shields.io/badge/marketplace-dagger--action-blue?logo=github&style=flat-square)](https://github.com/marketplace/actions/dagger-action)
-[![Test workflow](https://img.shields.io/github/workflow/status/dagger/dagger-action/test?label=test&logo=github&style=flat-square)](https://github.com/dagger/dagger-action/actions?workflow=test)
-[![Codecov](https://img.shields.io/codecov/c/github/dagger/dagger-action?logo=codecov&style=flat-square)](https://codecov.io/gh/dagger/dagger-action)
+[![GitHub release](https://img.shields.io/github/release/dagger/dagger-for-github.svg?style=flat-square)](https://github.com/dagger/dagger-for-github/releases/latest)
+[![GitHub marketplace](https://img.shields.io/badge/marketplace-dagger--action-blue?logo=github&style=flat-square)](https://github.com/marketplace/actions/dagger-for-github)
+[![Test workflow](https://img.shields.io/github/workflow/status/dagger/dagger-for-github/test?label=test&logo=github&style=flat-square)](https://github.com/dagger/dagger-for-github/actions?workflow=test)
+[![Codecov](https://img.shields.io/codecov/c/github/dagger/dagger-for-github?logo=codecov&style=flat-square)](https://codecov.io/gh/dagger/dagger-for-github)
 
 ## About
 
 GitHub Action for [Dagger](https://dagger.io), a programmable deployment system.
 
-![Screenshot](.github/dagger-action.png)
+![Screenshot](.github/dagger-for-github.png)
 
 ___
 
@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v2
       -
         name: Dagger
-        uses: dagger/dagger-action@v1
+        uses: dagger/dagger-for-github@v1
         with:
           age-key: ${{ secrets.DAGGER_AGE_KEY }}
           args: up
@@ -53,7 +53,7 @@ jobs:
 steps:
   -
     name: Install Dagger
-    uses: dagger/dagger-action@v1
+    uses: dagger/dagger-for-github@v1
     with:
       install-only: true
   -
