@@ -43,8 +43,7 @@ jobs:
         name: Dagger
         uses: dagger/dagger-for-github@v1
         with:
-          age-key: ${{ secrets.DAGGER_AGE_KEY }}
-          args: up
+          args: do test
 ```
 
 ### Install Only
@@ -70,7 +69,6 @@ Following inputs can be used as `step.with` keys
 | Name             | Type    | Default      | Description                                                      |
 |------------------|---------|--------------|------------------------------------------------------------------|
 | `version`        | String  | `latest`     | Dagger version                                                   |
-| `age-key`        | String  |              | Dagger private key                                               |
 | `args`           | String  |              | Arguments to pass to Dagger                                      |
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
 | `install-only`   | Bool    | `false`      | Just install Dagger                                              |

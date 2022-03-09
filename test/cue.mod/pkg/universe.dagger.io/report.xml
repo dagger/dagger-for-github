@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites time="32">
+<testsuite name="test.bats" tests="1" failures="0" errors="0" skipped="0" time="2" timestamp="2022-02-25T01:04:00" hostname="almbp.lan">
+    <testcase classname="test.bats" name="alpine" time="2" />
+
+</testsuite>
+<testsuite name="/Users/al/work/dagger/pkg/universe.dagger.io/docker/test/test.bats" tests="1" failures="0" errors="0" skipped="0" time="2" timestamp="2022-02-25T01:04:23" hostname="almbp.lan">
+    <testcase classname="/Users/al/work/dagger/pkg/universe.dagger.io/docker/test/test.bats" name="docker" time="2" />
+
+</testsuite>
+<testsuite name="/Users/al/work/dagger/pkg/universe.dagger.io/go/test/test.bats" tests="1" failures="0" errors="0" skipped="0" time="26" timestamp="2022-02-25T01:04:23" hostname="almbp.lan">
+    <testcase classname="/Users/al/work/dagger/pkg/universe.dagger.io/go/test/test.bats" name="bash" time="26" />
+
+</testsuite>
+<testsuite name="/Users/al/work/dagger/pkg/universe.dagger.io/yarn/test/test.bats" tests="1" failures="1" errors="0" skipped="0" time="1" timestamp="2022-02-25T01:04:23" hostname="almbp.lan">
+    <testcase classname="/Users/al/work/dagger/pkg/universe.dagger.io/yarn/test/test.bats" name="yarn" time="1">
+        <failure type="failure">(from function `dagger&#39; in file yarn/test/../../bats_helpers.bash, line 24,
+ in test file yarn/test/test.bats, line 8)
+  `dagger up&#39; failed
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93mactions.tests.customImage.build.container.script._write | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32mactions.tests.customImage.buildImage._dag.&quot;0&quot;._op | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[94mactions.tests.customName.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93minputs.directories.testdata2 | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32minputs.directories.testdata | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[96mactions.tests.simple.build.container.script._write | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[35mactions.tests.customName.build.container.script._write | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32mactions.tests.simple.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93mactions.tests.customImage.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[35mactions.tests.customName.build.container.script._write | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[96mactions.tests.simple.build.container.script._write | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93mactions.tests.customImage.build.container.script._write | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93minputs.directories.testdata2 | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32minputs.directories.testdata | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[94mactions.tests.customName.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32mactions.tests.simple.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[93mactions.tests.customImage.build._buildImage._dag.&quot;0&quot;._op | &#27;[0mcompleted    &#27;[1mduration=100ms&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[95mactions.tests.customName.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[95mactions.tests.customName.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[94mactions.tests.simple.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[94mactions.tests.simple.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[35mactions.tests.customImage.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[35mactions.tests.customImage.build._buildImage._dag.&quot;1&quot;._exec | &#27;[0mcompleted    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[96mactions.tests.customName.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[31mERR&#27;[0m &#27;[96mactions.tests.customName.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0m&#27;[31mfailed: process &quot;apk -U --no-cache add yarn&quot; did not complete successfully: unable to find user root: invalid argument&#27;[0m    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[32mactions.tests.customImage.buildImage._dag.&quot;0&quot;._op | &#27;[0mcompleted    &#27;[1mduration=300ms&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[95mactions.tests.simple.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[31mERR&#27;[0m &#27;[95mactions.tests.simple.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0m&#27;[31mfailed: process &quot;apk -U --no-cache add yarn&quot; did not complete successfully: unable to find user root: invalid argument&#27;[0m    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[32mINF&#27;[0m &#27;[36mactions.tests.customImage.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0mcomputing&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[31mERR&#27;[0m &#27;[36mactions.tests.customImage.build._buildImage._dag.&quot;2&quot;._exec | &#27;[0m&#27;[31mcanceled&#27;[0m    &#27;[1mduration=0s&#27;[0m&#27;[0m
+&#27;[90m5:03PM&#27;[0m &#27;[31mFTL&#27;[0m &#27;[95msystem | &#27;[0m&#27;[31mfailed to up environment: task failed: actions.tests.customName.build._buildImage._dag.&quot;2&quot;._exec: process &quot;apk -U --no-cache add yarn&quot; did not complete successfully: unable to find user root: invalid argument
+&#27;[0m&#27;[0m</failure>
+    </testcase>
+
+</testsuite>
+<testsuite name="/Users/al/work/dagger/pkg/universe.dagger.io/bash/test/test.bats" tests="1" failures="0" errors="0" skipped="0" time="1" timestamp="2022-02-25T01:04:23" hostname="almbp.lan">
+    <testcase classname="/Users/al/work/dagger/pkg/universe.dagger.io/bash/test/test.bats" name="bash" time="1" />
+
+</testsuite>
+<testsuite name="/Users/al/work/dagger/pkg/universe.dagger.io/netlify/test/test.bats" tests="1" failures="1" errors="0" skipped="0" time="0" timestamp="2022-02-25T01:04:47" hostname="almbp.lan">
+    <testcase classname="/Users/al/work/dagger/pkg/universe.dagger.io/netlify/test/test.bats" name="netlify" time="0">
+        <failure type="failure">(from function `dagger&#39; in file netlify/test/../../bats_helpers.bash, line 24,
+ in test file netlify/test/test.bats, line 8)
+  `dagger up&#39; failed
+&#27;[90m5:03PM&#27;[0m &#27;[31mFTL&#27;[0m &#27;[95msystem | &#27;[0m&#27;[31mfailed to load plan: import failed: cannot find package &quot;dagger.io/dagger&quot;:
+    /Users/al/work/dagger/pkg/universe.dagger.io/netlify/netlify.cue:6:2
+&#27;[0m&#27;[0m</failure>
+    </testcase>
+
+</testsuite>
+</testsuites>

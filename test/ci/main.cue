@@ -1,14 +1,21 @@
 package main
 
 import (
-	"alpha.dagger.io/docker"
-	"alpha.dagger.io/git"
+	"dagger.io/dagger"
+
+	"universe.dagger.io/alpine"
+	"universe.dagger.io/bash"
 )
 
-ctr: docker.#Build & {
-	source: git.#Repository & {
-		remote: "https://github.com/crazy-max/docker-fail2ban.git"
-		ref: "refs/tags/0.11.2-r3"
-		keepGitDir: true
+dagger.#Plan & {
+	actions: test: {
+		image: alpine.#Build & {
+			packages: bash: {}
+		}
+
+		bash.#Run & {
+			input: image.output
+			script: contents: "echo Hello World!"
+		}
 	}
 }
