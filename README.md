@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v2
       -
         name: Dagger
-        uses: dagger/dagger-for-github@v1
+        uses: dagger/dagger-for-github@v2
         with:
           args: do test
 ```
