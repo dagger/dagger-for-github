@@ -69,7 +69,7 @@ Following inputs can be used as `step.with` keys
 
 | Name             | Type    | Default      | Description                                                      |
 |------------------|---------|--------------|------------------------------------------------------------------|
-| `version`        | String  | `latest`     | Dagger version                                                   |
+| `version`        | String  | `0.1`        | Dagger version                                                   |
 | `age-key`        | String  |              | Dagger private key                                               |
 | `args`           | String  |              | Arguments to pass to Dagger                                      |
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
