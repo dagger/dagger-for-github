@@ -8,7 +8,7 @@ branding:
 inputs:
   version:
     description: 'Dagger version'
-    default: 'latest'
+    default: '0.1'
     required: false
   age-key:
     description: 'Dagger private key'
