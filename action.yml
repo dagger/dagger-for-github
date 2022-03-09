@@ -1,4 +1,4 @@
-name: 'Dagger Action'
+name: 'Dagger for GitHub'
 description: 'GitHub Action for Dagger, a programmable deployment system'
 author: 'dagger'
 branding:
