@@ -8,6 +8,12 @@ describe('install', () => {
     expect(fs.existsSync(daggerBin)).toBe(true);
   }, 100000);
 
+  it('acquires latest 0.1 version', async () => {
+    const daggerBin = await dagger.install('0.1');
+    console.log(daggerBin);
+    expect(fs.existsSync(daggerBin)).toBe(true);
+  }, 100000);
+
   it('acquires 0.1.0-alpha.9 version of Dagger', async () => {
     const daggerBin = await dagger.install('0.1.0-alpha.9');
     console.log(daggerBin);

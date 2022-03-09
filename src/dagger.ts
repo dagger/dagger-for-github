@@ -10,9 +10,7 @@ const osPlat: string = os.platform();
 const osArch: string = os.arch();
 
 export async function install(version: string): Promise<string> {
-  if (version == 'latest') {
-    version = await getLatestVersion();
-  }
+  version = await getVersionMapping(version);
   version = version.replace(/^v/, '');
 
   const downloadUrl: string = util.format('%s/releases/%s/%s', s3URL, version, getFilename(version));
@@ -38,9 +36,13 @@ export async function install(version: string): Promise<string> {
   return path.join(cachePath, osPlat == 'win32' ? 'dagger.exe' : 'dagger');
 }
 
-async function getLatestVersion(): Promise<string> {
+async function getVersionMapping(version: string): Promise<string> {
   const _http = new http.HttpClient('dagger-for-github');
-  const res = await _http.get(`${s3URL}/latest_version`);
+  const res = await _http.get(`${s3URL}/versions/${version}`);
+  if (res.message.statusCode != 200) {
+    return version;
+  }
+
   return await res.readBody().then(body => {
     return body.trim();
   });
@@ -48,7 +50,7 @@ async function getLatestVersion(): Promise<string> {
 
 const getFilename = (version: string): string => {
   const platform: string = osPlat == 'win32' ? 'windows' : osPlat;
-  const arch: string = osArch == 'x64' ? 'amd64' : 'i386';
+  const arch: string = osArch == 'x64' ? 'amd64' : osArch;
   const ext: string = osPlat == 'win32' ? '.zip' : '.tar.gz';
   return util.format('dagger_v%s_%s_%s%s', version, platform, arch, ext);
 };
