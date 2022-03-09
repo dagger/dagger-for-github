@@ -101,9 +101,7 @@ const osPlat = os.platform();
 const osArch = os.arch();
 function install(version) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (version == 'latest') {
-            version = yield getLatestVersion();
-        }
+        version = yield getVersionMapping(version);
         version = version.replace(/^v/, '');
         const downloadUrl = util.format('%s/releases/%s/%s', s3URL, version, getFilename(version));
         core.info(`Downloading ${downloadUrl}`);
@@ -126,10 +124,13 @@ function install(version) {
     });
 }
 exports.install = install;
-function getLatestVersion() {
+function getVersionMapping(version) {
     return __awaiter(this, void 0, void 0, function* () {
         const _http = new http.HttpClient('dagger-for-github');
-        const res = yield _http.get(`${s3URL}/latest_version`);
+        const res = yield _http.get(`${s3URL}/versions/${version}`);
+        if (res.message.statusCode != 200) {
+            return version;
+        }
         return yield res.readBody().then(body => {
             return body.trim();
         });
@@ -137,7 +138,7 @@ function getLatestVersion() {
 }
 const getFilename = (version) => {
     const platform = osPlat == 'win32' ? 'windows' : osPlat;
-    const arch = osArch == 'x64' ? 'amd64' : 'i386';
+    const arch = osArch == 'x64' ? 'amd64' : osArch;
     const ext = osPlat == 'win32' ? '.zip' : '.tar.gz';
     return util.format('dagger_v%s_%s_%s%s', version, platform, arch, ext);
 };
