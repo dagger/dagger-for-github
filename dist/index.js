@@ -41,7 +41,7 @@ const core = __importStar(__webpack_require__(186));
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
         return {
-            version: core.getInput('version') || '0.1',
+            version: core.getInput('version') || 'latest',
             ageKey: core.getInput('age-key'),
             workdir: core.getInput('workdir') || '.',
             args: core.getInput('args'),
