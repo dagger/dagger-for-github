@@ -42,7 +42,6 @@ function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
         return {
             version: core.getInput('version') || 'latest',
-            ageKey: core.getInput('age-key'),
             workdir: core.getInput('workdir') || '.',
             args: core.getInput('args'),
             installOnly: core.getBooleanInput('install-only'),
@@ -204,14 +203,6 @@ function run() {
             }
             else if (!inputs.args) {
                 throw new Error('args input required');
-            }
-            if (inputs.ageKey) {
-                yield core.group(`Import Dagger private key`, () => __awaiter(this, void 0, void 0, function* () {
-                    if (!fs_1.default.existsSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'))) {
-                        fs_1.default.mkdirSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger'), { recursive: true });
-                    }
-                    yield fs_1.default.writeFileSync(path_1.default.join(os_1.default.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
-                }));
             }
             if (inputs.workdir && inputs.workdir !== '.') {
                 core.info(`Using ${inputs.workdir} as working directory`);

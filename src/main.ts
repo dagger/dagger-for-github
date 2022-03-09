@@ -21,15 +21,6 @@ async function run(): Promise<void> {
       throw new Error('args input required');
     }
 
-    if (inputs.ageKey) {
-      await core.group(`Import Dagger private key`, async () => {
-        if (!fs.existsSync(path.join(os.homedir(), '.config', 'dagger'))) {
-          fs.mkdirSync(path.join(os.homedir(), '.config', 'dagger'), {recursive: true});
-        }
-        await fs.writeFileSync(path.join(os.homedir(), '.config', 'dagger', 'keys.txt'), inputs.ageKey);
-      });
-    }
-
     if (inputs.workdir && inputs.workdir !== '.') {
       core.info(`Using ${inputs.workdir} as working directory`);
       process.chdir(inputs.workdir);

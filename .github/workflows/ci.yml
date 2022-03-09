@@ -12,45 +12,25 @@ on:
   pull_request:
 
 jobs:
-  version:
+  do:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.31
+          - 0.2.0-beta.1
     steps:
       -
         name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Init env
-        run: |
-          mkdir -p ~/.config/dagger
-          cp ./test/keys.txt ~/.config/dagger/
       -
         name: Dagger
         uses: ./
         with:
           version: ${{ matrix.version }}
-          args: up --no-cache
-          workdir: ./test
-
-  age-secret:
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v3
-      -
-        name: Dagger
-        uses: ./
-        with:
-          age-key: ${{ secrets.DAGGER_AGE_KEY_TEST }}
-          args: up --no-cache
-          workdir: ./test
+          args: do test
+          workdir: ./test/ci
 
   install-only:
     runs-on: ubuntu-latest
@@ -59,16 +39,11 @@ jobs:
       matrix:
         version:
           - latest
-          - 0.1.0-alpha.17
+          - 0.2.0-beta.1
     steps:
       -
         name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Init env
-        run: |
-          mkdir ~/.config/dagger
-          cp ./test/keys.txt ~/.config/dagger/
       -
         name: Dagger
         uses: ./

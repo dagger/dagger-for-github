@@ -10,9 +10,6 @@ inputs:
     description: 'Dagger version'
     default: 'latest'
     required: false
-  age-key:
-    description: 'Dagger private key'
-    required: false
   args:
     description: 'Arguments to pass to Dagger'
     required: false
