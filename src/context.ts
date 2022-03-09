@@ -11,7 +11,7 @@ export interface Inputs {
 
 export async function getInputs(): Promise<Inputs> {
   return {
-    version: core.getInput('version') || '0.1',
+    version: core.getInput('version') || 'latest',
     ageKey: core.getInput('age-key'),
     workdir: core.getInput('workdir') || '.',
     args: core.getInput('args'),
