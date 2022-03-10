@@ -52,7 +52,7 @@ jobs:
 steps:
   -
     name: Install Dagger
-    uses: dagger/dagger-for-github@v1
+    uses: dagger/dagger-for-github@v2
     with:
       install-only: true
   -
