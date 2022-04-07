@@ -25,6 +25,10 @@ inputs:
     description: 'Cleanup Dagger home folder at the end of a job'
     default: 'true'
     required: false
+  project-update:
+    description: 'Run project update before args'
+    default: 'false'
+    required: false
 
 runs:
   using: 'node12'

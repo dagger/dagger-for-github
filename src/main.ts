@@ -26,6 +26,10 @@ async function run(): Promise<void> {
       process.chdir(inputs.workdir);
     }
 
+    if (inputs.projectUpdate) {
+      await exec.exec(`${daggerBin} project update`);
+    }
+
     stateHelper.setCleanup(inputs.cleanup);
     await exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
   } catch (error) {
