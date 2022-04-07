@@ -45,7 +45,8 @@ function getInputs() {
             workdir: core.getInput('workdir') || '.',
             args: core.getInput('args'),
             installOnly: core.getBooleanInput('install-only'),
-            cleanup: core.getBooleanInput('cleanup')
+            cleanup: core.getBooleanInput('cleanup'),
+            projectUpdate: core.getBooleanInput('project-update')
         };
     });
 }
@@ -207,6 +208,9 @@ function run() {
             if (inputs.workdir && inputs.workdir !== '.') {
                 core.info(`Using ${inputs.workdir} as working directory`);
                 process.chdir(inputs.workdir);
+            }
+            if (inputs.projectUpdate) {
+                yield exec.exec(`${daggerBin} project update`);
             }
             stateHelper.setCleanup(inputs.cleanup);
             yield exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
