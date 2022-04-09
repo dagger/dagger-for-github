@@ -46,7 +46,7 @@ function getInputs() {
             args: core.getInput('args'),
             installOnly: core.getBooleanInput('install-only'),
             cleanup: core.getBooleanInput('cleanup'),
-            projectUpdate: core.getBooleanInput('project-update')
+            projectUpdate: core.getInput('project-update')
         };
     });
 }
@@ -209,8 +209,11 @@ function run() {
                 core.info(`Using ${inputs.workdir} as working directory`);
                 process.chdir(inputs.workdir);
             }
-            if (inputs.projectUpdate) {
-                yield exec.exec(`${daggerBin} project update`);
+            if (inputs.projectUpdate && inputs.projectUpdate !== 'false') {
+                let command = `${daggerBin} project update`;
+                if (inputs.projectUpdate !== 'true')
+                    command += inputs.projectUpdate;
+                yield exec.exec(command);
             }
             stateHelper.setCleanup(inputs.cleanup);
             yield exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);

@@ -6,7 +6,7 @@ export interface Inputs {
   args: string;
   installOnly: boolean;
   cleanup: boolean;
-  projectUpdate: boolean;
+  projectUpdate: string;
 }
 
 export async function getInputs(): Promise<Inputs> {
@@ -16,6 +16,6 @@ export async function getInputs(): Promise<Inputs> {
     args: core.getInput('args'),
     installOnly: core.getBooleanInput('install-only'),
     cleanup: core.getBooleanInput('cleanup'),
-    projectUpdate: core.getBooleanInput('project-update')
+    projectUpdate: core.getInput('project-update')
   };
 }

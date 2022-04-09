@@ -26,8 +26,10 @@ async function run(): Promise<void> {
       process.chdir(inputs.workdir);
     }
 
-    if (inputs.projectUpdate) {
-      await exec.exec(`${daggerBin} project update`);
+    if (inputs.projectUpdate && inputs.projectUpdate !== 'false') {
+      let command = `${daggerBin} project update`;
+      if (inputs.projectUpdate !== 'true') command += inputs.projectUpdate;
+      await exec.exec(command);
     }
 
     stateHelper.setCleanup(inputs.cleanup);
