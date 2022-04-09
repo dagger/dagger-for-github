@@ -212,7 +212,7 @@ function run() {
             if (inputs.projectUpdate && inputs.projectUpdate !== 'false') {
                 let command = `${daggerBin} project update`;
                 if (inputs.projectUpdate !== 'true')
-                    command += inputs.projectUpdate;
+                    command += ' ' + inputs.projectUpdate;
                 yield exec.exec(command);
             }
             stateHelper.setCleanup(inputs.cleanup);

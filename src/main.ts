@@ -28,7 +28,7 @@ async function run(): Promise<void> {
 
     if (inputs.projectUpdate && inputs.projectUpdate !== 'false') {
       let command = `${daggerBin} project update`;
-      if (inputs.projectUpdate !== 'true') command += inputs.projectUpdate;
+      if (inputs.projectUpdate !== 'true') command += ' ' + inputs.projectUpdate;
       await exec.exec(command);
     }
 
