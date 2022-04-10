@@ -73,7 +73,7 @@ Following inputs can be used as `step.with` keys
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
 | `install-only`   | Bool    | `false`      | Just install Dagger                                              |
 | `cleanup`        | Bool    | `true`       | Cleanup Dagger home folder at the end of a job                   |
-| `project-update` | Bool    | `false`      | Run `dagger project update` before running `args`                |
+| `project-update` | String  | `false`      | Run `dagger project update` before running `args`                |
 
 ## Development
 
