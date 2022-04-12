@@ -36,7 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getInputs = void 0;
+exports.asyncForEach = exports.getInputList = exports.getInputs = void 0;
 const core = __importStar(__webpack_require__(186));
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -50,6 +50,25 @@ function getInputs() {
     });
 }
 exports.getInputs = getInputs;
+function getInputList(name, ignoreComma) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const items = core.getInput(name);
+        if (items == '') {
+            return [];
+        }
+        return items
+            .split(/\r?\n/)
+            .filter(x => x)
+            .reduce((acc, line) => acc.concat(!ignoreComma ? line.split(',').filter(x => x) : line).map(pat => pat.trim()), []);
+    });
+}
+exports.getInputList = getInputList;
+const asyncForEach = (array, callback) => __awaiter(void 0, void 0, void 0, function* () {
+    for (const index in array) {
+        yield callback(array[index], index, array);
+    }
+});
+exports.asyncForEach = asyncForEach;
 //# sourceMappingURL=context.js.map
 
 /***/ }),
