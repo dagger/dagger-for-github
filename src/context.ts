@@ -6,6 +6,7 @@ export interface Inputs {
   args: string;
   installOnly: boolean;
   cleanup: boolean;
+  cmds: string[];
 }
 
 export async function getInputs(): Promise<Inputs> {
@@ -14,7 +15,8 @@ export async function getInputs(): Promise<Inputs> {
     workdir: core.getInput('workdir') || '.',
     args: core.getInput('args'),
     installOnly: core.getBooleanInput('install-only'),
-    cleanup: core.getBooleanInput('cleanup')
+    cleanup: core.getBooleanInput('cleanup'),
+    cmds: await getInputList('cmds')
   };
 }
 

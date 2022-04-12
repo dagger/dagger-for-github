@@ -45,7 +45,8 @@ function getInputs() {
             workdir: core.getInput('workdir') || '.',
             args: core.getInput('args'),
             installOnly: core.getBooleanInput('install-only'),
-            cleanup: core.getBooleanInput('cleanup')
+            cleanup: core.getBooleanInput('cleanup'),
+            cmds: yield getInputList('cmds')
         };
     });
 }
@@ -220,15 +221,22 @@ function run() {
                 core.debug(`Added ${daggerDir} to PATH`);
                 return;
             }
-            else if (!inputs.args) {
-                throw new Error('args input required');
+            else if (!inputs.args && !inputs.cmds.length) {
+                throw new Error(`you need to provide either 'args' or 'cmds'`);
             }
             if (inputs.workdir && inputs.workdir !== '.') {
                 core.info(`Using ${inputs.workdir} as working directory`);
                 process.chdir(inputs.workdir);
             }
             stateHelper.setCleanup(inputs.cleanup);
-            yield exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
+            if (inputs.args) {
+                inputs.cmds.unshift(inputs.args);
+            }
+            for (const cmd of inputs.cmds) {
+                yield core.group(cmd, () => __awaiter(this, void 0, void 0, function* () {
+                    yield exec.exec(`${daggerBin} ${cmd} --log-format plain`);
+                }));
+            }
         }
         catch (error) {
             core.setFailed(error.message);

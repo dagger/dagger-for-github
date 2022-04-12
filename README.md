@@ -43,7 +43,7 @@ jobs:
         name: Dagger
         uses: dagger/dagger-for-github@v2
         with:
-          args: do test
+          cmds: do test
 ```
 
 ### Install Only
@@ -60,6 +60,19 @@ steps:
     run: dagger version
 ```
 
+### Multiple commands
+
+```yaml
+steps:
+  -
+    name: Install Dagger
+    uses: dagger/dagger-for-github@v2
+    with:
+      cmds: |
+        project update
+        do test
+```
+
 ## Customizing
 
 ### inputs
@@ -69,7 +82,7 @@ Following inputs can be used as `step.with` keys
 | Name             | Type    | Default      | Description                                                      |
 |------------------|---------|--------------|------------------------------------------------------------------|
 | `version`        | String  | `latest`     | Dagger version                                                   |
-| `args`           | String  |              | Arguments to pass to Dagger                                      |
+| `cmds`           | String  |              | Commands to run on Dagger                                        |
 | `workdir`        | String  | `.`          | Working directory (below repository root)                        |
 | `install-only`   | Bool    | `false`      | Just install Dagger                                              |
 | `cleanup`        | Bool    | `true`       | Cleanup Dagger home folder at the end of a job                   |
