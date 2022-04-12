@@ -17,8 +17,8 @@ async function run(): Promise<void> {
       core.addPath(daggerDir);
       core.debug(`Added ${daggerDir} to PATH`);
       return;
-    } else if (!inputs.args) {
-      throw new Error('args input required');
+    } else if (!inputs.args && !inputs.cmds.length) {
+      throw new Error(`you need to provide either 'args' or 'cmds'`);
     }
 
     if (inputs.workdir && inputs.workdir !== '.') {
@@ -27,7 +27,16 @@ async function run(): Promise<void> {
     }
 
     stateHelper.setCleanup(inputs.cleanup);
-    await exec.exec(`${daggerBin} ${inputs.args} --log-format plain`);
+
+    if (inputs.args) {
+      inputs.cmds.unshift(inputs.args);
+    }
+
+    for (const cmd of inputs.cmds) {
+      await core.group(cmd, async () => {
+        await exec.exec(`${daggerBin} ${cmd} --log-format plain`);
+      });
+    }
   } catch (error) {
     core.setFailed(error.message);
   }

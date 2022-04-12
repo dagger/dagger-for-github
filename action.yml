@@ -13,6 +13,10 @@ inputs:
   args:
     description: 'Arguments to pass to Dagger'
     required: false
+    deprecationMessage: 'Use cmds input instead'
+  cmds:
+    description: 'Commands to run on Dagger'
+    required: false
   workdir:
     description: 'Working directory (below repository root)'
     default: '.'
