@@ -109,4 +109,4 @@ docker buildx bake test
 
 ## License
 
-MIT. See `LICENSE` for more details.
+Apache-2.0 License. See `LICENSE` for more details.
