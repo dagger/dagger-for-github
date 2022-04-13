@@ -79,13 +79,20 @@ steps:
 
 Following inputs can be used as `step.with` keys
 
-| Name             | Type    | Default      | Description                                                      |
-|------------------|---------|--------------|------------------------------------------------------------------|
-| `version`        | String  | `latest`     | Dagger version                                                   |
-| `cmds`           | String  |              | Commands to run on Dagger                                        |
-| `workdir`        | String  | `.`          | Working directory (below repository root)                        |
-| `install-only`   | Bool    | `false`      | Just install Dagger                                              |
-| `cleanup`        | Bool    | `true`       | Cleanup Dagger home folder at the end of a job                   |
+> `List` type is a newline-delimited string
+> ```yaml
+> cmds: |
+>   project update
+>   do test
+> ```
+
+| Name             | Type   | Default      | Description                                    |
+|------------------|--------|--------------|------------------------------------------------|
+| `version`        | String | `latest`     | Dagger version                                 |
+| `cmds`           | List   |              | List of Dagger commands                        |
+| `workdir`        | String | `.`          | Working directory (below repository root)      |
+| `install-only`   | Bool   | `false`      | Just install Dagger                            |
+| `cleanup`        | Bool   | `true`       | Cleanup Dagger home folder at the end of a job |
 
 ## Development
 
