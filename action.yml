@@ -15,7 +15,7 @@ inputs:
     required: false
     deprecationMessage: 'Use cmds input instead'
   cmds:
-    description: 'Commands to run on Dagger'
+    description: 'List of Dagger commands'
     required: false
   workdir:
     description: 'Working directory (below repository root)'
