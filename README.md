@@ -16,6 +16,7 @@ ___
 * [Usage](#usage)
   * [Basic](#basic)
   * [Install Only](#install-only)
+  * [Multiple commands](#multiple-commands)
 * [Customizing](#customizing)
   * [inputs](#inputs)
 * [License](#license)
@@ -38,7 +39,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       -
         name: Dagger
         uses: dagger/dagger-for-github@v2
@@ -65,7 +66,7 @@ steps:
 ```yaml
 steps:
   -
-    name: Install Dagger
+    name: Dagger
     uses: dagger/dagger-for-github@v2
     with:
       cmds: |
