@@ -234,7 +234,11 @@ function run() {
             }
             for (const cmd of inputs.cmds) {
                 yield core.group(cmd, () => __awaiter(this, void 0, void 0, function* () {
-                    yield exec.exec(`${daggerBin} ${cmd} --log-format plain`);
+                    yield exec.exec(`${daggerBin} ${cmd}`, undefined, {
+                        env: Object.assign({}, process.env, {
+                            DAGGER_LOG_FORMAT: 'plain'
+                        })
+                    });
                 }));
             }
         }
