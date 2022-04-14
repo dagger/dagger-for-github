@@ -34,7 +34,13 @@ async function run(): Promise<void> {
 
     for (const cmd of inputs.cmds) {
       await core.group(cmd, async () => {
-        await exec.exec(`${daggerBin} ${cmd} --log-format plain`);
+        await exec.exec(`${daggerBin} ${cmd}`, undefined, {
+          env: Object.assign({}, process.env, {
+            DAGGER_LOG_FORMAT: 'plain'
+          }) as {
+            [key: string]: string;
+          }
+        });
       });
     }
   } catch (error) {
