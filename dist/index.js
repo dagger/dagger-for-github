@@ -202,6 +202,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const proc = __importStar(__webpack_require__(129));
 const fs_1 = __importDefault(__webpack_require__(747));
 const path_1 = __importDefault(__webpack_require__(622));
 const os_1 = __importDefault(__webpack_require__(87));
@@ -209,7 +210,6 @@ const context = __importStar(__webpack_require__(842));
 const dagger = __importStar(__webpack_require__(113));
 const stateHelper = __importStar(__webpack_require__(647));
 const core = __importStar(__webpack_require__(186));
-const exec = __importStar(__webpack_require__(514));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -234,7 +234,7 @@ function run() {
             }
             for (const cmd of inputs.cmds) {
                 yield core.group(cmd, () => __awaiter(this, void 0, void 0, function* () {
-                    yield exec.exec(`${daggerBin} ${cmd}`, undefined, {
+                    proc.execSync(`${daggerBin} ${cmd}`, {
                         env: Object.assign({}, process.env, {
                             DAGGER_LOG_FORMAT: 'plain'
                         })

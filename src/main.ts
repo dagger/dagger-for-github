@@ -1,3 +1,4 @@
+import * as proc from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -5,7 +6,6 @@ import * as context from './context';
 import * as dagger from './dagger';
 import * as stateHelper from './state-helper';
 import * as core from '@actions/core';
-import * as exec from '@actions/exec';
 
 async function run(): Promise<void> {
   try {
@@ -34,7 +34,7 @@ async function run(): Promise<void> {
 
     for (const cmd of inputs.cmds) {
       await core.group(cmd, async () => {
-        await exec.exec(`${daggerBin} ${cmd}`, undefined, {
+        proc.execSync(`${daggerBin} ${cmd}`, {
           env: Object.assign({}, process.env, {
             DAGGER_LOG_FORMAT: 'plain'
           }) as {
