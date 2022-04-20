@@ -8,14 +8,18 @@ import (
 )
 
 dagger.#Plan & {
-	actions: test: {
-		image: alpine.#Build & {
-			packages: bash: {}
-		}
+	actions: {
+		params: greeting: string | *"world"
 
-		bash.#Run & {
-			input: image.output
-			script: contents: "echo Hello World!"
+		test: {
+			image: alpine.#Build & {
+				packages: bash: {}
+			}
+
+			bash.#Run & {
+				input: image.output
+				script: contents: "echo hello \(params.greeting)"
+			}
 		}
 	}
 }

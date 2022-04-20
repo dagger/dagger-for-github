@@ -33,6 +33,20 @@ jobs:
           cmds: do test
           workdir: ./test/ci
 
+  do-with:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Dagger
+        uses: ./
+        with:
+          cmds: |
+            do --no-cache --with 'actions: params: greeting: "GitHub Actions"' test
+          workdir: ./test/ci
+
   update-do:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +55,6 @@ jobs:
       - name: Dagger
         uses: ./
         with:
-          version: ${{ matrix.version }}
           cmds: |
             project update
             do test
