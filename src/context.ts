@@ -28,10 +28,7 @@ export async function getInputList(name: string, ignoreComma?: boolean): Promise
   return items
     .split(/\r?\n/)
     .filter(x => x)
-    .reduce<string[]>(
-      (acc, line) => acc.concat(!ignoreComma ? line.split(',').filter(x => x) : line).map(pat => pat.trim()),
-      []
-    );
+    .reduce<string[]>((acc, line) => acc.concat(!ignoreComma ? line.split(',').filter(x => x) : line).map(pat => pat.trim()), []);
 }
 
 export const asyncForEach = async (array, callback) => {
