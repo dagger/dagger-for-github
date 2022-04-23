@@ -5,7 +5,7 @@ import * as core from '@actions/core';
 import * as http from '@actions/http-client';
 import * as tc from '@actions/tool-cache';
 
-const s3URL: string = 'https://dl.dagger.io/dagger';
+const s3URL = 'https://dl.dagger.io/dagger';
 const osPlat: string = os.platform();
 const osArch: string = os.arch();
 
