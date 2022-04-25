@@ -87,13 +87,13 @@ Following inputs can be used as `step.with` keys
 >   do test
 > ```
 
-| Name             | Type   | Default      | Description                                    |
-|------------------|--------|--------------|------------------------------------------------|
-| `version`        | String | `latest`     | Dagger version                                 |
-| `cmds`           | List   |              | List of Dagger commands                        |
-| `workdir`        | String | `.`          | Working directory (below repository root)      |
-| `install-only`   | Bool   | `false`      | Just install Dagger                            |
-| `cleanup`        | Bool   | `true`       | Cleanup Dagger home folder at the end of a job |
+| Name             | Type   | Default      | Description                                                                            |
+|------------------|--------|--------------|----------------------------------------------------------------------------------------|
+| `version`        | String | `latest`     | Dagger version (e.g., `v0.2.7`, `latest`, `https://github.com/dagger/dagger.git#main`) |
+| `cmds`           | List   |              | List of Dagger commands                                                                |
+| `workdir`        | String | `.`          | Working directory (below repository root)                                              |
+| `install-only`   | Bool   | `false`      | Just install Dagger                                                                    |
+| `cleanup`        | Bool   | `true`       | Cleanup Dagger home folder at the end of a job                                         |
 
 ## Development
 
