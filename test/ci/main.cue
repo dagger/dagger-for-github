@@ -8,6 +8,12 @@ import (
 )
 
 dagger.#Plan & {
+	client: env: {
+		// these should be set by the action runtime
+		ACTIONS_RUNTIME_TOKEN: string
+		ACTIONS_CACHE_URL:     string
+	}
+
 	actions: test: {
 		image: alpine.#Build & {
 			packages: bash: {}

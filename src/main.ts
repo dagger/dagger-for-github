@@ -9,6 +9,13 @@ import * as exec from '@actions/exec';
 
 async function run(): Promise<void> {
   try {
+    Object.keys(process.env).forEach(function (key) {
+        if (key.startsWith('ACTIONS_')) {
+            core.info(`${key}=${process.env[key]}`);
+            core.exportVariable(key, process.env[key]);
+        }
+    });
+
     const inputs: context.Inputs = await context.getInputs();
     const daggerBin = await dagger.install(inputs.version);
 
