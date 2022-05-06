@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Dagger
-        uses: dagger/dagger-for-github@v2
+        uses: dagger/dagger-for-github@v3
         with:
           cmds: do test
 ```
@@ -53,7 +53,7 @@ jobs:
 steps:
   -
     name: Install Dagger
-    uses: dagger/dagger-for-github@v2
+    uses: dagger/dagger-for-github@v3
     with:
       install-only: true
   -
@@ -67,7 +67,7 @@ steps:
 steps:
   -
     name: Dagger
-    uses: dagger/dagger-for-github@v2
+    uses: dagger/dagger-for-github@v3
     with:
       cmds: |
         project update
