@@ -63,8 +63,11 @@ async function cleanup(): Promise<void> {
   if (!stateHelper.cleanup) {
     return;
   }
-  core.info(`Removing ${path.join(os.homedir(), '.config', 'dagger')}`);
-  fs.rmdirSync(path.join(os.homedir(), '.config', 'dagger'), {recursive: true});
+  const daggerHome = path.join(os.homedir(), '.config', 'dagger');
+  if (fs.existsSync(daggerHome)) {
+    core.info(`Removing ${daggerHome}`);
+    fs.rmSync(daggerHome, {recursive: true});
+  }
 }
 
 if (!stateHelper.IsPost) {
