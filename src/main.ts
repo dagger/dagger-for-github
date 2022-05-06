@@ -4,13 +4,24 @@ import os from 'os';
 import * as context from './context';
 import * as dagger from './dagger';
 import * as stateHelper from './state-helper';
+import * as util from './util';
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 
 async function run(): Promise<void> {
   try {
     const inputs: context.Inputs = await context.getInputs();
-    const daggerBin = await dagger.install(inputs.version);
+
+    let daggerBin;
+    if (util.isValidUrl(inputs.version)) {
+      core.startGroup(`Build and install Dagger`);
+      daggerBin = await dagger.build(inputs.version);
+      core.endGroup();
+    } else {
+      core.startGroup(`Download and install Dagger`);
+      daggerBin = await dagger.install(inputs.version);
+      core.endGroup();
+    }
 
     if (inputs.installOnly) {
       const daggerDir = path.dirname(daggerBin);
@@ -22,7 +33,7 @@ async function run(): Promise<void> {
     }
 
     if (inputs.workdir && inputs.workdir !== '.') {
-      core.info(`Using ${inputs.workdir} as working directory`);
+      core.debug(`Using ${inputs.workdir} as working directory`);
       process.chdir(inputs.workdir);
     }
 

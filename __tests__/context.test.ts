@@ -1,5 +1,15 @@
-import {describe, expect, it} from '@jest/globals';
+import {describe, expect, jest, it} from '@jest/globals';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as context from '../src/context';
+
+jest.spyOn(context, 'tmpDir').mockImplementation((): string => {
+  const tmpDir = path.join('/tmp/.dagger-jest').split(path.sep).join(path.posix.sep);
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, {recursive: true});
+  }
+  return tmpDir;
+});
 
 describe('getInputList', () => {
   it('handles single line correctly', async () => {

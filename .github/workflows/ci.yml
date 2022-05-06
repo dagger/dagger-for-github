@@ -82,3 +82,23 @@ jobs:
         name: Check
         run: |
           dagger version
+
+  build-ref:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ref:
+          - refs/tags/v0.2.5
+          - refs/pull/2288/head
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Dagger
+        uses: ./
+        with:
+          version: https://github.com/dagger/dagger.git#${{ matrix.ref }}
+          cmds: do test
+          workdir: ./test/ci
