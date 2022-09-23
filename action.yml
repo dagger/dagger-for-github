@@ -1,5 +1,5 @@
-name: 'Dagger for GitHub'
-description: 'GitHub Action for Dagger, a programmable deployment system'
+name: 'Sagger Dagger for GitHub'
+description: 'GitHub Action for Sagger Dagger, a programmable deployment system'
 author: 'dagger'
 branding:
   color: 'green'
