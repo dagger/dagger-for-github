@@ -6,6 +6,9 @@ branding:
   icon: 'package'
 
 inputs:
+  url:
+    description: 'Dagger custom url'
+    required: false
   version:
     description: 'Dagger version'
     default: '0.2'
