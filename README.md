@@ -94,6 +94,7 @@ Following inputs can be used as `step.with` keys
 | `workdir`      | String | `.`     | Working directory (below repository root)                                              |
 | `install-only` | Bool   | `false` | Just install Dagger                                                                    |
 | `cleanup`      | Bool   | `true`  | Cleanup Dagger home folder at the end of a job                                         |
+| `url`          | String |         | Optional custom URL to a Dagger archive                                                |
 
 ## Development
 
