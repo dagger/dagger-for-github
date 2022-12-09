@@ -19,7 +19,7 @@ async function run(): Promise<void> {
       core.endGroup();
     } else {
       core.startGroup(`Download and install Dagger`);
-      daggerBin = await dagger.install(inputs.version);
+      daggerBin = await dagger.install(inputs.version, inputs.url);
       core.endGroup();
     }
 

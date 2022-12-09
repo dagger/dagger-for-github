@@ -41,11 +41,11 @@ export async function build(inputBuildRef: string): Promise<string> {
   return path.join(toolPath, osPlat == 'win32' ? 'dagger.exe' : 'dagger');
 }
 
-export async function install(version: string): Promise<string> {
+export async function install(version: string, url?: string): Promise<string> {
   version = await getVersionMapping(version);
   version = version.replace(/^v/, '');
 
-  const downloadUrl: string = util.format('%s/releases/%s/%s', s3URL, version, getFilename(version));
+  const downloadUrl: string = getDownloadUrl(url, version);
   core.info(`Downloading ${downloadUrl}`);
   const downloadPath: string = await tc.downloadTool(downloadUrl);
   core.debug(`Downloaded to ${downloadPath}`);
@@ -80,9 +80,20 @@ async function getVersionMapping(version: string): Promise<string> {
   });
 }
 
-const getFilename = (version: string): string => {
+export const getFilename = (version: string): string => {
   const platform: string = osPlat == 'win32' ? 'windows' : osPlat;
   const arch: string = osArch == 'x64' ? 'amd64' : osArch;
   const ext: string = osPlat == 'win32' ? '.zip' : '.tar.gz';
   return util.format('dagger_v%s_%s_%s%s', version, platform, arch, ext);
+};
+
+export const getDownloadUrl = (url?: string, version = 'latest'): string => {
+  if (url === undefined || url === null || url === '') {
+    return util.format('%s/releases/%s/%s', s3URL, version, getFilename(version));
+  } else {
+    // if url is different from the default, then use it
+    // and ignore the version, expecting the user to provide an URL
+    // to the actual archive file
+    return util.format('%s', url);
+  }
 };

@@ -13,6 +13,7 @@ export function tmpDir(): string {
 }
 
 export interface Inputs {
+  url: string;
   version: string;
   workdir: string;
   args: string;
@@ -23,6 +24,7 @@ export interface Inputs {
 
 export async function getInputs(): Promise<Inputs> {
   return {
+    url: core.getInput('url'),
     version: core.getInput('version') || '0.2',
     workdir: core.getInput('workdir') || '.',
     args: core.getInput('args'),
