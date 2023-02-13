@@ -58,7 +58,7 @@ steps:
       install-only: true
   -
     name: Show Dagger version
-    run: dagger version
+    run: dagger-cue version
 ```
 
 ### Multiple commands
