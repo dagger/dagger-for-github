@@ -89,7 +89,7 @@ Following inputs can be used as `step.with` keys
 
 | Name           | Type   | Default | Description                                                                            |
 |----------------|--------|---------|----------------------------------------------------------------------------------------|
-| `version`      | String | `0.2`   | Dagger version (e.g., `0.2.36`, `latest`, `https://github.com/dagger/dagger.git#main`) |
+| `version`      | String | `0.2.232`   | Dagger version (e.g., `0.2.232`, `latest`, `https://github.com/dagger/dagger.git#main`) |
 | `cmds`         | List   |         | List of Dagger commands                                                                |
 | `workdir`      | String | `.`     | Working directory (below repository root)                                              |
 | `install-only` | Bool   | `false` | Just install Dagger                                                                    |

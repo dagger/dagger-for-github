@@ -7,8 +7,8 @@ branding:
 
 inputs:
   version:
-    description: 'Dagger version'
-    default: '0.2'
+    description: 'Dagger CUE version'
+    default: '0.2.232'
     required: false
   args:
     description: 'Arguments to pass to Dagger'

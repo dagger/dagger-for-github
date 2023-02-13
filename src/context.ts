@@ -23,7 +23,7 @@ export interface Inputs {
 
 export async function getInputs(): Promise<Inputs> {
   return {
-    version: core.getInput('version') || '0.2',
+    version: core.getInput('version') || '0.2.232',
     workdir: core.getInput('workdir') || '.',
     args: core.getInput('args'),
     installOnly: core.getBooleanInput('install-only'),

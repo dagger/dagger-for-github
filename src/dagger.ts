@@ -8,7 +8,7 @@ import * as exec from '@actions/exec';
 import * as http from '@actions/http-client';
 import * as tc from '@actions/tool-cache';
 
-const s3URL = 'https://dl.dagger.io/dagger';
+const s3URL = 'https://dl.dagger.io/dagger-cue';
 const osPlat: string = os.platform();
 const osArch: string = os.arch();
 
@@ -23,7 +23,7 @@ export async function build(inputBuildRef: string): Promise<string> {
   core.debug(`Remote ref ${sha} found`);
 
   let toolPath: string;
-  toolPath = tc.find('dagger', sha);
+  toolPath = tc.find('dagger-cue', sha);
   if (!toolPath) {
     const outFolder = path.join(context.tmpDir(), 'out').split(path.sep).join(path.posix.sep);
     toolPath = await exec
@@ -34,11 +34,11 @@ export async function build(inputBuildRef: string): Promise<string> {
         if (res.stderr.length > 0 && res.exitCode != 0) {
           core.warning(res.stderr.trim());
         }
-        return tc.cacheFile(`${outFolder}/bin/dagger`, osPlat == 'win32' ? 'dagger.exe' : 'dagger', 'dagger', sha);
+        return tc.cacheFile(`${outFolder}/bin/dagger-cue`, osPlat == 'win32' ? 'dagger-cue.exe' : 'dagger-cue', 'dagger-cue', sha);
       });
   }
 
-  return path.join(toolPath, osPlat == 'win32' ? 'dagger.exe' : 'dagger');
+  return path.join(toolPath, osPlat == 'win32' ? 'dagger-cue.exe' : 'dagger-cue');
 }
 
 export async function install(version: string): Promise<string> {
@@ -59,13 +59,13 @@ export async function install(version: string): Promise<string> {
   }
   core.debug(`Extracted to ${extPath}`);
 
-  const cachePath: string = await tc.cacheDir(extPath, 'dagger', version);
+  const cachePath: string = await tc.cacheDir(extPath, 'dagger-cue', version);
   core.debug(`Cached to ${cachePath}`);
 
-  const exePath: string = path.join(cachePath, osPlat == 'win32' ? 'dagger.exe' : 'dagger');
+  const exePath: string = path.join(cachePath, osPlat == 'win32' ? 'dagger-cue.exe' : 'dagger-cue');
   core.debug(`Exe path is ${exePath}`);
 
-  return path.join(cachePath, osPlat == 'win32' ? 'dagger.exe' : 'dagger');
+  return path.join(cachePath, osPlat == 'win32' ? 'dagger-cue.exe' : 'dagger-cue');
 }
 
 async function getVersionMapping(version: string): Promise<string> {
@@ -84,5 +84,5 @@ const getFilename = (version: string): string => {
   const platform: string = osPlat == 'win32' ? 'windows' : osPlat;
   const arch: string = osArch == 'x64' ? 'amd64' : osArch;
   const ext: string = osPlat == 'win32' ? '.zip' : '.tar.gz';
-  return util.format('dagger_v%s_%s_%s%s', version, platform, arch, ext);
+  return util.format('dagger-cue_v%s_%s_%s%s', version, platform, arch, ext);
 };
