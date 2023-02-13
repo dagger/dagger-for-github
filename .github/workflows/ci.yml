@@ -19,8 +19,8 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - 0.2
-          - 0.2.5
+          - latest
+          - 0.2.232
     steps:
       -
         name: Checkout
@@ -56,8 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - 0.2
-          - 0.2.5
+          - 0.2.232
     steps:
       -
         name: Checkout
@@ -71,7 +70,7 @@ jobs:
       -
         name: Check
         run: |
-          dagger version
+          dagger-cue version
 
   build-ref:
     runs-on: ubuntu-latest
@@ -79,8 +78,7 @@ jobs:
       fail-fast: false
       matrix:
         ref:
-          - refs/tags/v0.2.5
-          - refs/pull/2288/head
+          - refs/heads/cue-sdk
     steps:
       -
         name: Checkout
