@@ -61,6 +61,22 @@ steps:
     run: dagger-cue version
 ```
 
+### Install Only and `--with`
+
+```yaml
+steps:
+  -
+    name: Install Dagger
+      uses: dagger/dagger-for-github@v4
+      with:
+        install-only: true
+     
+  -
+    name: Build a subdir example
+    run: |
+      dagger-cue do build --log-format plain -with 'actions:build:subdir: ${{env.SUBDIR}}'
+```
+
 ### Multiple commands
 
 ```yaml
