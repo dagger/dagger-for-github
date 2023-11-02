@@ -1,36 +1,40 @@
 name: 'Dagger for GitHub'
-description: 'GitHub Action for Dagger, a programmable deployment system'
-author: 'dagger'
-branding:
-  color: 'green'
-  icon: 'package'
-
+description: 'Run dagger commands in Github Actions'
 inputs:
   version:
-    description: 'Dagger CUE version'
-    default: '0.2.232'
+    description: 'Dagger Version'
     required: false
-  args:
-    description: 'Arguments to pass to Dagger'
+    default: '0.9.3'
+  dagger-flags:
+    description: 'Dagger CLI Flags'
     required: false
-    deprecationMessage: 'Use cmds input instead'
-  cmds:
-    description: 'List of Dagger commands'
+    default: '-s'
+  verb:
+    description: 'CLI verb (call, download, up, functions, shell, query)'
     required: false
-  workdir:
-    description: 'Working directory (below repository root)'
+    default: 'call'
+  cloud-token:
+    description: 'Dagger Cloud Token'
+    required: false
+    default: ''
+  module:
+    description: 'Dagger module to call. Local or Git'
+    required: false
     default: '.'
+  args:
+    description: 'Arguments to pass to CLI'
     required: false
-  install-only:
-    description: 'Just install Dagger'
-    default: 'false'
-    required: false
-  cleanup:
-    description: 'Cleanup Dagger home folder at the end of a job'
-    default: 'true'
-    required: false
-
+    default: ''
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
-  post: 'dist/index.js'
+  using: "composite"
+  steps:
+    - run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=${{ inputs.version }} sh; cd -; }
+      shell: bash
+    - run: if ! [ -d ./.git ]; then git clone -b ${GITHUB_REF_NAME} --no-checkout https://github.com/${GITHUB_REPOSITORY} .; fi
+      shell: bash
+    - run: DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} /usr/local/bin/dagger ${{ inputs.dagger-flags }} ${{ inputs.verb }} -m ${{ inputs.module }} ${{ inputs.args }}
+      shell: bash
+    - run: docker stop -t 300 $(docker ps --filter name="dagger-engine-*" -q)
+      shell: bash
+      if: ${{ always() }}
+
