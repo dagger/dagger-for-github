@@ -8,11 +8,15 @@ inputs:
   dagger-flags:
     description: 'Dagger CLI Flags'
     required: false
-    default: '-s'
+    default: '--progress plain'
   verb:
-    description: 'CLI verb (call, download, up, functions, shell, query)'
+    description: 'CLI verb (call, run, download, up, functions, shell, query)'
     required: false
     default: 'call'
+  workdir:
+    description: 'The working directory in which to run the Dagger CLI'
+    required: false
+    default: '.'
   cloud-token:
     description: 'Dagger Cloud Token'
     required: false
@@ -20,7 +24,7 @@ inputs:
   module:
     description: 'Dagger module to call. Local or Git'
     required: false
-    default: '.'
+    default: ''
   args:
     description: 'Arguments to pass to CLI'
     required: false
@@ -28,13 +32,27 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=${{ inputs.version }} sh; cd -; }
+    - run: |
+        cd /usr/local && { \
+        curl -sL https://dl.dagger.io/dagger/install.sh 2>/dev/null | \
+        DAGGER_VERSION=${{ inputs.version }} sh 2>/dev/null; }
       shell: bash
+
     - run: if ! [ -d ./.git ]; then git clone -b ${GITHUB_REF_NAME} --no-checkout https://github.com/${GITHUB_REPOSITORY} .; fi
       shell: bash
-    - run: DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} /usr/local/bin/dagger ${{ inputs.dagger-flags }} ${{ inputs.verb }} -m ${{ inputs.module }} ${{ inputs.args }}
+
+    - run: |
+        cd ${{ inputs.workdir }} && { \
+        DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
+        /usr/local/bin/dagger \
+        ${{ inputs.dagger-flags }} \
+        ${{ inputs.verb }} \
+        ${INPUT_MODULE:+-m $INPUT_MODULE} \
+        ${{ inputs.args }}; }
       shell: bash
+      env:
+          INPUT_MODULE: ${{ inputs.module }}
+
     - run: docker stop -t 300 $(docker ps --filter name="dagger-engine-*" -q)
       shell: bash
       if: ${{ always() }}
-
