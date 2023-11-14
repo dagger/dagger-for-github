@@ -38,9 +38,6 @@ runs:
         DAGGER_VERSION=${{ inputs.version }} sh 2>/dev/null; }
       shell: bash
 
-    - run: if ! [ -d ./.git ]; then git clone -b ${GITHUB_REF_NAME} --no-checkout https://github.com/${GITHUB_REPOSITORY} .; fi
-      shell: bash
-
     - run: |
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
