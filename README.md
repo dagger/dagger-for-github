@@ -1,25 +1,41 @@
-# dagger-for-github
+# GitHub action to run Dagger
 
-Github action to run Dagger
+## Usage Examples
+
+### `dagger call` (default)
 
 ```yaml
-- name: Dagger
+- name: Hello
   uses: dagger/dagger-for-github@v5
   with:
-    module: github.com/kpenfound/greetings-api/ci
-    args: ci --commit $GITHUB_SHA
+    verb: call 
+    module: github.com/shykes/daggerverse/hello
+    args: with-greeting --greeting Hola with-name --name Jeremy message
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
 ```
 
-or with more options:
+### `dagger run`
 
 ```yaml
-- name: Dagger
+- name: Integration Test
   uses: dagger/dagger-for-github@v5
   with:
-    module: github.com/kpenfound/greetings-api/ci
-    args: ci --commit $GITHUB_SHA
+    workdir: db-service
+    verb: run
+    args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
     version: "0.9.3"
-    verb: call
 ```
+
+### All `with:` input parameter options
+
+| Key           | Description                                               | Required | Default             |
+|---------------|-------------------------------------------------------------|----------|---------------------|
+| `version`     | Dagger Version                                              | false    | '0.9.3'             |
+| `dagger-flags`| Dagger CLI Flags                                            | false    | '--progress plain'  |
+| `verb`        | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'              |
+| `workdir`     | The working directory in which to run the Dagger CLI        | false    | '.'                 |
+| `cloud-token` | Dagger Cloud Token                                          | false    | ''                  |
+| `module`      | Dagger module to call. Local or Git                         | false    | ''                  |
+| `args`        | Arguments to pass to CLI                                    | false    | ''                  |
+
