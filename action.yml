@@ -50,6 +50,8 @@ runs:
       env:
           INPUT_MODULE: ${{ inputs.module }}
 
-    - run: docker stop -t 300 $(docker ps --filter name="dagger-engine-*" -q)
+    - run: |
+        mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
+        docker stop -t 300 "${containers[@]}"
       shell: bash
       if: ${{ always() }}
