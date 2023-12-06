@@ -33,7 +33,15 @@ runs:
   using: "composite"
   steps:
     - run: |
-        cd /usr/local && { \
+        # Fallback to /usr/local for backwards compatability
+        prefix_dir="${RUNNER_TEMP:-/usr/local}"
+        # Ensure the dir is writable otherwise fallback to tmpdir
+        if [[ ! -d "$prefix_dir" ]] || [[ ! -w "$prefix_dir" ]]; then
+            prefix_dir="$(mktemp -d)"
+        fi
+        printf '%s/bin' "$prefix_dir" >> $GITHUB_PATH
+        # The install.sh script creates path ${prefix_dir}/bin
+        cd "$prefix_dir" && { \
         curl -sL https://dl.dagger.io/dagger/install.sh 2>/dev/null | \
         DAGGER_VERSION=${{ inputs.version }} sh 2>/dev/null; }
       shell: bash
@@ -41,7 +49,7 @@ runs:
     - run: |
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
-        /usr/local/bin/dagger \
+        dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
