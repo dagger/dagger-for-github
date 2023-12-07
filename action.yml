@@ -43,7 +43,7 @@ runs:
         # The install.sh script creates path ${prefix_dir}/bin
         cd "$prefix_dir" && { \
         curl -sL https://dl.dagger.io/dagger/install.sh 2>/dev/null | \
-        DAGGER_VERSION=${{ inputs.version }} sh 2>/dev/null; }
+        DAGGER_VERSION=${{ inputs.version }} sh; }
       shell: bash
 
     - run: |
