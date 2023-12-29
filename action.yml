@@ -50,6 +50,7 @@ runs:
       env:
           INPUT_MODULE: ${{ inputs.module }}
 
-    - run: docker stop -t 300 $(docker ps --filter name="dagger-engine-*" -q)
+    # if the engine is not running, ingore the fail
+    - run: docker stop -t 300 $(docker ps --filter name="dagger-engine-*" -q) || true 
       shell: bash
       if: ${{ always() }}
