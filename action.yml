@@ -29,6 +29,10 @@ inputs:
     description: 'Arguments to pass to CLI'
     required: false
     default: ''
+  engine-stop:
+    description: 'Whether to stop the Dagger Engine after this run'
+    required: false
+    default: 'true'
 runs:
   using: "composite"
   steps:
@@ -64,4 +68,4 @@ runs:
           docker stop -t 300 "${containers[@]}";
         fi
       shell: bash
-      if: ${{ always() }}
+      if: inputs.engine-stop == 'true' 

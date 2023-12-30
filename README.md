@@ -38,4 +38,4 @@
 | `cloud-token` | Dagger Cloud Token                                          | false    | ''                  |
 | `module`      | Dagger module to call. Local or Git                         | false    | ''                  |
 | `args`        | Arguments to pass to CLI                                    | false    | ''                  |
-
+| `engine-stop` | Whether to stop the Dagger Engine after this run            | false    | 'true'              |
