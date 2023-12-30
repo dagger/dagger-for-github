@@ -60,6 +60,8 @@ runs:
 
     - run: |
         mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
-        docker stop -t 300 "${containers[@]}"
+        if [[ "${#containers[@]}" -gt 0 ]]; then
+          docker stop -t 300 "${containers[@]}";
+        fi
       shell: bash
       if: ${{ always() }}
