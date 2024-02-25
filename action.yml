@@ -4,7 +4,7 @@ inputs:
   version:
     description: 'Dagger Version'
     required: false
-    default: '0.9.5'
+    default: '0.9.11'
   dagger-flags:
     description: 'Dagger CLI Flags'
     required: false
