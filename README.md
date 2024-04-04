@@ -24,14 +24,14 @@
     verb: run
     args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "0.10.2"
+    version: "0.11.0"
 ```
 
 ### All `with:` input parameter options
 
 | Key             | Description                                                   | Required   | Default               |
 | --------------- | ------------------------------------------------------------- | ---------- | --------------------- |
-| `version`       | Dagger Version                                                | false      | '0.10.2'              |
+| `version`       | Dagger Version                                                | false      | '0.11.0'              |
 | `dagger-flags`  | Dagger CLI Flags                                              | false      | '--progress plain'    |
 | `verb`          | CLI verb (call, run, download, up, functions, shell, query)   | false      | 'call'                |
 | `workdir`       | The working directory in which to run the Dagger CLI          | false      | '.'                   |
