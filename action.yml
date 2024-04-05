@@ -44,10 +44,19 @@ runs:
             prefix_dir="$(mktemp -d)"
         fi
         printf '%s/bin' "$prefix_dir" >> $GITHUB_PATH
+
+        # If the dagger version is 'latest', set the version back to an empty
+        # string. This allows the install script to detect and install the latest
+        # version itself
+        VERSION=${{ inputs.version }}
+        if [[ "$VERSION" == "latest" ]]; then
+          VERSION=
+        fi
+
         # The install.sh script creates path ${prefix_dir}/bin
         cd "$prefix_dir" && { \
         curl -sL https://dl.dagger.io/dagger/install.sh 2>/dev/null | \
-        DAGGER_VERSION=${{ inputs.version }} sh; }
+        DAGGER_VERSION=$VERSION sh; }
       shell: bash
 
     - run: |
