@@ -27,6 +27,10 @@
     version: "0.11.0"
 ```
 
+### Staying in sync with the `latest` version
+
+By setting the version to `latest`, this action will install the latest version of Dagger.
+
 ### All `with:` input parameter options
 
 | Key             | Description                                                   | Required   | Default               |
