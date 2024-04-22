@@ -10,7 +10,7 @@
   with:
     verb: call 
     module: github.com/shykes/daggerverse/hello
-    args: hello --greeting Hola --name Jeremy message
+    args: hello --greeting Hola --name Jeremy
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
 ```
 
