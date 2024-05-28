@@ -1,38 +1,38 @@
-name: 'Dagger for GitHub'
-description: 'Run dagger commands in Github Actions'
+name: "Dagger for GitHub"
+description: "Run dagger commands in Github Actions"
 inputs:
   version:
-    description: 'Dagger Version'
+    description: "Dagger Version"
     required: false
-    default: '0.11.4'
+    default: "0.11.5"
   dagger-flags:
-    description: 'Dagger CLI Flags'
+    description: "Dagger CLI Flags"
     required: false
-    default: '--progress plain'
+    default: "--progress plain"
   verb:
-    description: 'CLI verb (call, run, download, up, functions, shell, query)'
+    description: "CLI verb (call, run, download, up, functions, shell, query)"
     required: false
-    default: 'call'
+    default: "call"
   workdir:
-    description: 'The working directory in which to run the Dagger CLI'
+    description: "The working directory in which to run the Dagger CLI"
     required: false
-    default: '.'
+    default: "."
   cloud-token:
-    description: 'Dagger Cloud Token'
+    description: "Dagger Cloud Token"
     required: false
-    default: ''
+    default: ""
   module:
-    description: 'Dagger module to call. Local or Git'
+    description: "Dagger module to call. Local or Git"
     required: false
-    default: ''
+    default: ""
   args:
-    description: 'Arguments to pass to CLI'
+    description: "Arguments to pass to CLI"
     required: false
-    default: ''
+    default: ""
   engine-stop:
-    description: 'Whether to stop the Dagger Engine after this run'
+    description: "Whether to stop the Dagger Engine after this run"
     required: false
-    default: 'true'
+    default: "true"
 runs:
   using: "composite"
   steps:
@@ -69,7 +69,7 @@ runs:
         ${{ inputs.args }}; }
       shell: bash
       env:
-          INPUT_MODULE: ${{ inputs.module }}
+        INPUT_MODULE: ${{ inputs.module }}
 
     - run: |
         mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
@@ -77,4 +77,4 @@ runs:
           docker stop -t 300 "${containers[@]}";
         fi
       shell: bash
-      if: inputs.engine-stop == 'true' 
+      if: inputs.engine-stop == 'true'
