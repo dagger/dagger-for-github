@@ -8,7 +8,7 @@
 - name: Hello
   uses: dagger/dagger-for-github@v5
   with:
-    verb: call 
+    verb: call
     module: github.com/shykes/daggerverse/hello
     args: hello --greeting Hola --name Jeremy
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
@@ -24,7 +24,7 @@
     verb: run
     args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "0.11.5"
+    version: "0.11.6"
 ```
 
 ### Staying in sync with the `latest` version
@@ -33,13 +33,13 @@ By setting the version to `latest`, this action will install the latest version 
 
 ### All `with:` input parameter options
 
-| Key             | Description                                                   | Required   | Default               |
-| --------------- | ------------------------------------------------------------- | ---------- | --------------------- |
-| `version`       | Dagger Version                                                | false      | '0.11.5'              |
-| `dagger-flags`  | Dagger CLI Flags                                              | false      | '--progress plain'    |
-| `verb`          | CLI verb (call, run, download, up, functions, shell, query)   | false      | 'call'                |
-| `workdir`       | The working directory in which to run the Dagger CLI          | false      | '.'                   |
-| `cloud-token`   | Dagger Cloud Token                                            | false      | ''                    |
-| `module`        | Dagger module to call. Local or Git                           | false      | ''                    |
-| `args`          | Arguments to pass to CLI                                      | false      | ''                    |
-| `engine-stop`   | Whether to stop the Dagger Engine after this run              | false      | 'true'                |
+| Key            | Description                                                 | Required | Default            |
+| -------------- | ----------------------------------------------------------- | -------- | ------------------ |
+| `version`      | Dagger Version                                              | false    | '0.11.6'           |
+| `dagger-flags` | Dagger CLI Flags                                            | false    | '--progress plain' |
+| `verb`         | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'             |
+| `workdir`      | The working directory in which to run the Dagger CLI        | false    | '.'                |
+| `cloud-token`  | Dagger Cloud Token                                          | false    | ''                 |
+| `module`       | Dagger module to call. Local or Git                         | false    | ''                 |
+| `args`         | Arguments to pass to CLI                                    | false    | ''                 |
+| `engine-stop`  | Whether to stop the Dagger Engine after this run            | false    | 'true'             |
