@@ -36,7 +36,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - shell: bash
+      run: |
+        set -o pipefail
         # Fallback to /usr/local for backwards compatability
         prefix_dir="${RUNNER_TEMP:-/usr/local}"
         # Ensure the dir is writable otherwise fallback to tmpdir
@@ -54,12 +56,13 @@ runs:
         fi
 
         # The install.sh script creates path ${prefix_dir}/bin
-        cd "$prefix_dir" && { \
-        curl -sL https://dl.dagger.io/dagger/install.sh 2>/dev/null | \
-        DAGGER_VERSION=$VERSION sh; }
-      shell: bash
+        curl -fsS https://dl.dagger.io/dagger/install.sh \
+        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION sh
 
-    - run: |
+    - shell: bash
+      env:
+        INPUT_MODULE: ${{ inputs.module }}
+      run: |
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
@@ -67,14 +70,11 @@ runs:
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
         ${{ inputs.args }}; }
-      shell: bash
-      env:
-        INPUT_MODULE: ${{ inputs.module }}
 
-    - run: |
+    - if: inputs.engine-stop == 'true'
+      shell: bash
+      run: |
         mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
         if [[ "${#containers[@]}" -gt 0 ]]; then
           docker stop -t 300 "${containers[@]}";
         fi
-      shell: bash
-      if: inputs.engine-stop == 'true'
