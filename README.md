@@ -6,7 +6,7 @@
 
 ```yaml
 - name: Hello
-  uses: dagger/dagger-for-github@v5
+  uses: dagger/dagger-for-github@v6
   with:
     verb: call
     module: github.com/shykes/daggerverse/hello
@@ -18,7 +18,7 @@
 
 ```yaml
 - name: Integration Test
-  uses: dagger/dagger-for-github@v5
+  uses: dagger/dagger-for-github@v6
   with:
     workdir: db-service
     verb: run
