@@ -47,17 +47,34 @@ runs:
         fi
         printf '%s/bin' "$prefix_dir" >> $GITHUB_PATH
 
-        # If the dagger version is 'latest', set the version back to an empty
-        # string. This allows the install script to detect and install the latest
-        # version itself
         VERSION=${{ inputs.version }}
         if [[ "$VERSION" == "latest" ]]; then
+          # Get the latest version.
+          #
+          # Set the version back to an empty string. This allows the install
+          # script to detect and install the latest version itself.
+          VERSION=
+        else if [[ "$VERSION" =~ "^v" ]]; then
+          # Get the specified version.
+          #
+          # No need to set anything.
+        else if [[ "$VERSION" == "head" ]]; then
+          # Get the latest nightly build from "main".
+          #
+          # Set the commit to "head".
+          COMMIT=$VERSION
+          VERSION=
+        else if [[ "$VERSION" =~ '[a-z0-9]{40}' ]]; then echo success; fi
+          # Get the specified nightly build from "main".
+          #
+          # Set the commit to the specified commit sha.
+          COMMIT=$VERSION
           VERSION=
         fi
 
         # The install.sh script creates path ${prefix_dir}/bin
         curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION sh
+        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION DAGGER_COMMIT=$COMMIT sh
 
     - shell: bash
       env:
