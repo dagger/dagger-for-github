@@ -51,13 +51,38 @@ runs:
         # string. This allows the install script to detect and install the latest
         # version itself
         VERSION=${{ inputs.version }}
+
         if [[ "$VERSION" == "latest" ]]; then
-          VERSION=
+          # Get the latest version.
+          #
+          # Set the version back to an empty string. This allows the install
+          # script to detect and install the latest version itself.
+          VERSION=""
+        elif [[ "$VERSION" =~ ^v ]]; then
+          # Get the specified version.
+          #
+          # No need to set anything.
+          :
+        elif [[ "$VERSION" == "head" ]]; then
+          # Get the latest nightly build from "main".
+          #
+          # Set the commit to "head".
+          COMMIT="$VERSION"
+          VERSION=""
+        elif [[ "$VERSION" =~ [a-z0-9]{40} ]]; then
+          # Get the specified nightly build from "main".
+          #
+          # Set the commit to the specified commit sha.
+          COMMIT="$VERSION"
+          VERSION=""
+        else
+          echo "Invalid version specified: $VERSION"
+          exit 1
         fi
 
         # The install.sh script creates path ${prefix_dir}/bin
         curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION sh
+        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION DAGGER_COMMIT=$COMMIT sh
 
     - shell: bash
       env:
