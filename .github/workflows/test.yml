@@ -1,0 +1,95 @@
+name: Test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  # Enable manual trigger for easy debugging
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  version:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Use latest"
+        id: use-latest
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: version
+      - name: "Use latest (check)"
+        run: |
+          target='${{ steps.use-latest.outputs.output }}'
+          if [[ "$target" =~ v[0-9]*\.[0-9]*\.[0-9]* ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
+      - name: "Use v0.13.5"
+        id: use-v0-13-5
+        uses: ./
+        with:
+          version: v0.13.5
+          verb: core
+          args: version
+      - name: "Use v0.13.5 (check)"
+        run: |
+          target='${{ steps.use-v0-13-5.outputs.output }}'
+          if [[ "$target" =~ v0\.13\.5 ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
+      - name: "Use commit"
+        id: use-commit
+        uses: ./
+        with:
+          commit: 540b4d1490f253054140f9249e823adf111e1c06
+          verb: core
+          args: version
+      - name: "Use commit (check)"
+        run: |
+          target='${{ steps.use-commit.outputs.output }}'
+          if [[ "$target" =~ v0\.13\.6-[0-9]+-540b4d1490f2 ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
+      - name: "Use head"
+        id: use-head
+        uses: ./
+        with:
+          commit: head
+          verb: core
+          args: version
+      - name: "Use head (check)"
+        run: |
+          target='${{ steps.use-commit.outputs.output }}'
+          if [[ "$target" =~ v[0-9]*\.[0-9]*\.[0-9]*-[0-9]+-[0-9a-f]{12} ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
