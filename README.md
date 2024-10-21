@@ -36,6 +36,7 @@ By setting the version to `latest`, this action will install the latest version 
 | Key            | Description                                                 | Required | Default            |
 | -------------- | ----------------------------------------------------------- | -------- | ------------------ |
 | `version`      | Dagger Version                                              | false    | '0.13.5'           |
+| `commit`       | Dagger Dev Commit (overrides `version`)                     | false    | ''                 |
 | `dagger-flags` | Dagger CLI Flags                                            | false    | '--progress plain' |
 | `verb`         | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'             |
 | `workdir`      | The working directory in which to run the Dagger CLI        | false    | '.'                |

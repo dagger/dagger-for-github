@@ -5,6 +5,10 @@ inputs:
     description: "Dagger Version"
     required: false
     default: "0.13.5"
+  commit:
+    description: "Dagger Dev Commit"
+    required: false
+    default: ""
   dagger-flags:
     description: "Dagger CLI Flags"
     required: false
@@ -55,9 +59,11 @@ runs:
           VERSION=
         fi
 
+        COMMIT=${{ inputs.commit }}
+
         # The install.sh script creates path ${prefix_dir}/bin
         curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION sh
+        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
 
     - shell: bash
       env:
