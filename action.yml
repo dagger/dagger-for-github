@@ -5,6 +5,10 @@ inputs:
     description: "Dagger Version"
     required: false
     default: "0.13.5"
+  commit:
+    description: "Dagger Dev Commit"
+    required: false
+    default: ""
   dagger-flags:
     description: "Dagger CLI Flags"
     required: false
@@ -33,6 +37,10 @@ inputs:
     description: "Whether to stop the Dagger Engine after this run"
     required: false
     default: "true"
+outputs:
+  output:
+    description: "Job output"
+    value: ${{ steps.exec.outputs.stdout }}
 runs:
   using: "composite"
   steps:
@@ -55,21 +63,31 @@ runs:
           VERSION=
         fi
 
+        # If the dagger commit is 'latest', set the version back to 'head'.
+        COMMIT=${{ inputs.commit }}
+        if [[ "$VERSION" == "latest" ]]; then
+          VERSION="head"
+        fi
+
         # The install.sh script creates path ${prefix_dir}/bin
         curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION=$VERSION sh
+        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
 
-    - shell: bash
+    - id: exec
+      shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
+        tmpout=$(mktemp)
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args }}; }
+        ${{ inputs.args }}; } | tee "${tmpout}"
+
+        (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
 
     - if: inputs.engine-stop == 'true'
       shell: bash
