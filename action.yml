@@ -69,13 +69,31 @@ runs:
       env:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
-        cd ${{ inputs.workdir }} && { \
-        DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
-        dagger \
-        ${{ inputs.dagger-flags }} \
-        ${{ inputs.verb }} \
-        ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args }}; }
+        # Start the Dagger output section with a header and open the code block tags
+        {
+          echo "### Dagger Output"
+          echo ""
+          echo "<pre><code>"
+        } >> $GITHUB_STEP_SUMMARY
+
+        # Run the dagger command and capture its output
+        cd ${{ inputs.workdir }} && {
+          OUTPUT=$(DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
+            dagger \
+            ${{ inputs.dagger-flags }} \
+            ${{ inputs.verb }} \
+            ${INPUT_MODULE:+-m $INPUT_MODULE} \
+            ${{ inputs.args }})
+
+          # Append the output to the step summary
+          echo "$OUTPUT" >> $GITHUB_STEP_SUMMARY
+        }
+
+        # Close the code block tags
+        {
+          echo "</code></pre>"
+          echo ""
+        } >> $GITHUB_STEP_SUMMARY
 
     - if: inputs.engine-stop == 'true'
       shell: bash
