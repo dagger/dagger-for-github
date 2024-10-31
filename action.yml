@@ -90,11 +90,14 @@ runs:
         # Send stdout to GITHUB_OUTPUT
         (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
         
+        # Set up ANSI to HTML converter
+        sudo npm install -g ansi-to-html
+
         # Append formatted stdout to GITHUB_STEP_SUMMARY
         {
           echo "### Dagger stdout"
           echo ""
-          echo "<pre><code>"
+          echo -n "<pre><code>"
           cat "${tmpout}"
           echo "</code></pre>"
           echo ""
@@ -104,8 +107,8 @@ runs:
         {
           echo "### Dagger stderr"
           echo ""
-          echo "<pre><code>"
-          cat "${tmperr}"
+          echo -n "<pre><code>"
+          ansi-to-html < "${tmperr}"
           echo "</code></pre>"
           echo ""
         } >> $GITHUB_STEP_SUMMARY
