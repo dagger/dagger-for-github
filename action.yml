@@ -75,25 +75,37 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
-        # Run the command and capture its output in `tmpout`
-        # while also displaying it in the logs
-        cd ${{ inputs.workdir }} && { \
-        DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
-        dagger \
-        ${{ inputs.dagger-flags }} \
-        ${{ inputs.verb }} \
-        ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args }}; } | tee "${tmpout}"
-
-        # Send the output to GITHUB_OUTPUT for further processing if needed
+        tmperr=$(mktemp)
+      
+        # Run the command and capture stdout and stderr separately
+        cd ${{ inputs.workdir }} && {
+          DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
+          dagger \
+          ${{ inputs.dagger-flags }} \
+          ${{ inputs.verb }} \
+          ${INPUT_MODULE:+-m $INPUT_MODULE} \
+          ${{ inputs.args }}
+        } >"${tmpout}" 2>"${tmperr}"  # Redirect stdout to tmpout and stderr to tmperr
+      
+        # Send stdout to GITHUB_OUTPUT
         (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
-
-        # Append formatted output to GITHUB_STEP_SUMMARY
+        
+        # Append formatted stdout to GITHUB_STEP_SUMMARY
         {
-          echo "### Dagger Output"
+          echo "### Dagger stdout"
           echo ""
           echo "<pre><code>"
           cat "${tmpout}"
+          echo "</code></pre>"
+          echo ""
+        } >> $GITHUB_STEP_SUMMARY
+
+        # Append formatted stderr to GITHUB_STEP_SUMMARY
+        {
+          echo "### Dagger stderr"
+          echo ""
+          echo "<pre><code>"
+          cat "${tmperr}"
           echo "</code></pre>"
           echo ""
         } >> $GITHUB_STEP_SUMMARY
