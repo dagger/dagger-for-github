@@ -77,16 +77,15 @@ runs:
         tmpout=$(mktemp)
         tmperr=$(mktemp)
       
-        # Run the command and capture stdout and stderr separately
         cd ${{ inputs.workdir }} && {
-          DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
-          dagger \
-          ${{ inputs.dagger-flags }} \
-          ${{ inputs.verb }} \
-          ${INPUT_MODULE:+-m $INPUT_MODULE} \
-          ${{ inputs.args }}
-        } >"${tmpout}" 2>"${tmperr}"  # Redirect stdout to tmpout and stderr to tmperr
-      
+        DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
+        dagger \
+        ${{ inputs.dagger-flags }} \
+        ${{ inputs.verb }} \
+        ${INPUT_MODULE:+-m $INPUT_MODULE} \
+        ${{ inputs.args }}
+        } > >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+
         # Send stdout to GITHUB_OUTPUT
         (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
         
