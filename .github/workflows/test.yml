@@ -17,6 +17,49 @@ permissions:
   pull-requests: write
 
 jobs:
+  output:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Use output"
+        id: use-output
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: container from --address=alpine with-exec --args echo,"hello world" stdout
+      - name: "Use output (check)"
+        run: |
+          target='${{ steps.use-output.outputs.output }}'
+          if [[ "$target" == "hello world" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
+      - name: "Use multiline output"
+        id: use-multiline-output
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: container from --address=alpine with-exec --args echo,-e,"hello\nworld" stdout
+      - name: "Use output (check)"
+        run: |
+          target='${{ steps.use-multiline-output.outputs.output }}'
+          result='hello
+          world'
+          if [[ "$target" == "$result" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
   version:
     runs-on: "ubuntu-latest"
     steps:
