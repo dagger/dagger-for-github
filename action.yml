@@ -80,7 +80,7 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
-        INPUT_ARGS="${ INPUT_ARGS:-INPUT_CALL }"
+        INPUT_ARGS="${INPUT_ARGS:-INPUT_CALL}"
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
