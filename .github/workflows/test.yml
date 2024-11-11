@@ -113,3 +113,12 @@ jobs:
             echo "does not match"
             exit 1
           fi
+  nocall:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Only Install"
+        uses: ./
+      - name: "Test Install"
+        run: |
+          dagger core version
