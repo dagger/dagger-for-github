@@ -93,6 +93,10 @@ jobs:
             echo "does not match"
             exit 1
           fi
+  call:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
       - name: "Test call"
         id: test-call
         uses: ./
