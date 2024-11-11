@@ -90,7 +90,16 @@ runs:
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
         $ARGS; } | tee "${tmpout}"
 
-        (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
+        {
+          # we need a delim that doesn't appear in the output - a hash of the
+          # file itself *probably* won't (if it does, we have larger
+          # cryptographic problems)
+          delim="$(sha256sum $tmpout | cut -d " " -f1)"
+          echo "stdout<<${delim}"
+          cat "${tmpout}"
+          echo
+          echo "${delim}"
+        } >> "$GITHUB_OUTPUT"
 
     - if: (inputs.call != '' || inputs.args != '') && inputs.engine-stop == 'true'
       shell: bash
