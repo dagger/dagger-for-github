@@ -37,6 +37,10 @@ inputs:
     description: "Whether to stop the Dagger Engine after this run"
     required: false
     default: "true"
+  call:
+    description: "Function and arguments for dagger call"
+    required: false
+    default: ""
 outputs:
   output:
     description: "Job output"
@@ -70,22 +74,25 @@ runs:
         | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
 
     - id: exec
+      if: inputs.call != '' || inputs.args != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
+        ARGS="${{ inputs.args }}"
+        ARGS="${ARGS:-"${{ inputs.call }}"}"
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args }}; } | tee "${tmpout}"
+        $ARGS; } | tee "${tmpout}"
 
         (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
 
-    - if: inputs.engine-stop == 'true'
+    - if: (inputs.call != '' || inputs.args != '') && inputs.engine-stop == 'true'
       shell: bash
       run: |
         mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)

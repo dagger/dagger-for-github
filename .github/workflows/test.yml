@@ -93,3 +93,32 @@ jobs:
             echo "does not match"
             exit 1
           fi
+  call:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test call"
+        id: test-call
+        uses: ./
+        with:
+          module: github.com/shykes/daggerverse/hello@v0.3.0
+          call: hello
+      - name: "Test call (check)"
+        run: |
+          target='${{ steps.test-call.outputs.output }}'
+          if [[ "$target" == "hello, world!" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+  nocall:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Only Install"
+        uses: ./
+      - name: "Test Install"
+        run: |
+          dagger core version
