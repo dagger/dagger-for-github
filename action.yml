@@ -80,14 +80,15 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
-        INPUT_ARGS="${INPUT_ARGS:-$INPUT_CALL}"
+        ARGS="${{ inputs.args }}"
+        ARGS="${INPUT_ARGS:-"${{ inputs.call }}"}"
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        $INPUT_ARGS; } | tee "${tmpout}"
+        $ARGS; } | tee "${tmpout}"
 
         (echo -n "stdout=" && cat "${tmpout}") >> "$GITHUB_OUTPUT"
 
