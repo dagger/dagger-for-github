@@ -81,7 +81,7 @@ runs:
       run: |
         tmpout=$(mktemp)
         ARGS="${{ inputs.args }}"
-        ARGS="${INPUT_ARGS:-"${{ inputs.call }}"}"
+        ARGS="${ARGS:-"${{ inputs.call }}"}"
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
