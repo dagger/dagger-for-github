@@ -80,15 +80,13 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
-        ARGS="${{ inputs.args }}"
-        ARGS="${ARGS:-"${{ inputs.call }}"}"
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        $ARGS; } | tee "${tmpout}"
+        ${{ inputs.args || inputs.call }}; } | tee "${tmpout}"
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
