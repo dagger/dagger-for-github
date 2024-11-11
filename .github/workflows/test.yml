@@ -28,11 +28,31 @@ jobs:
         with:
           version: latest
           verb: core
-          args: container from --address=alpine with-exec --args echo,"hello world" stdout
+          args: container from --address=alpine with-exec --args echo,-n,"hello world" stdout
       - name: "Use output (check)"
         run: |
           target='${{ steps.use-output.outputs.output }}'
           if [[ "$target" == "hello world" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
+      - name: "Use trailing output"
+        id: use-trailing-output
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: container from --address=alpine with-exec --args echo,-n,-e,"hello world\n" stdout
+      - name: "Use output (check)"
+        run: |
+          target='${{ steps.use-trailing-output.outputs.output }}'
+          result='hello world
+          '
+          if [[ "$target" == "$result" ]]; then
             echo "matches"
             exit 0
           else
@@ -46,7 +66,7 @@ jobs:
         with:
           version: latest
           verb: core
-          args: container from --address=alpine with-exec --args echo,-e,"hello\nworld" stdout
+          args: container from --address=alpine with-exec --args echo,-n,-e,"hello\nworld" stdout
       - name: "Use output (check)"
         run: |
           target='${{ steps.use-multiline-output.outputs.output }}'
