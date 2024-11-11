@@ -8,9 +8,8 @@
 - name: Hello
   uses: dagger/dagger-for-github@v6
   with:
-    verb: call
     module: github.com/shykes/daggerverse/hello
-    args: hello --greeting Hola --name Jeremy
+    call: hello --greeting Hola --name Jeremy
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
 ```
 
@@ -43,4 +42,5 @@ By setting the version to `latest`, this action will install the latest version 
 | `cloud-token`  | Dagger Cloud Token                                          | false    | ''                 |
 | `module`       | Dagger module to call. Local or Git                         | false    | ''                 |
 | `args`         | Arguments to pass to CLI                                    | false    | ''                 |
+| `call`         | Arguments to pass to CLI (Alias for args)                   | false    | ''                 |
 | `engine-stop`  | Whether to stop the Dagger Engine after this run            | false    | 'true'             |
