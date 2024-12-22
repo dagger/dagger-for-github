@@ -62,15 +62,19 @@ runs:
         # If the dagger version is 'latest', set the version back to an empty
         # string. This allows the install script to detect and install the latest
         # version itself
+        # We remove any leading 'v' on VERSION here to ensure a match
         VERSION=${{ inputs.version }}
         if [[ "$VERSION" == "latest" ]]; then
           VERSION=
+        else
+          VERSION=$(echo -n $VERSION | cut -d' ' -f2 | cut -dv -f2 | tr -d '\n')
         fi
 
         COMMIT=${{ inputs.commit }}
 
         if [[ -x "$(command -v dagger)" ]]; then
-          pre_installed_version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
+          # get dagger version without leading 'v' and always without newline
+          pre_installed_version="$(dagger --silent version | cut -d' ' -f2 | cut -dv -f2 | tr -d '\n')"
           if [[ "$pre_installed_version" != "$VERSION" ]]; then
             echo "dagger ${pre_installed_version} is installed, but needed ${VERSION}"
             exit 1
