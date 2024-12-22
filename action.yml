@@ -70,9 +70,9 @@ runs:
         COMMIT=${{ inputs.commit }}
 
         if [[ -x "$(command -v dagger)" ]]; then
-          pre-installed-version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
-          if [[ "$pre-installed-version" != "$DAGGER_VERSION" ]]; then
-            echo "dagger ${pre-installed-version} is installed, but needed ${DAGGER_VERSION}"
+          pre_installed_version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
+          if [[ "$pre_installed_version" != "$DAGGER_VERSION" ]]; then
+            echo "dagger ${pre_installed_version} is installed, but needed ${DAGGER_VERSION}"
             exit 1
           fi
         else
