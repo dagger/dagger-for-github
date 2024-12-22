@@ -69,9 +69,17 @@ runs:
 
         COMMIT=${{ inputs.commit }}
 
-        # The install.sh script creates path ${prefix_dir}/bin
-        curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        if [[ -x "$(command -v dagger)" ]]; then
+          pre-installed-version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
+          if [[ "$pre-installed-version" != "$DAGGER_VERSION" ]]; then
+            echo "dagger ${pre-installed-version} is installed, but needed ${DAGGER_VERSION}"
+            exit 1
+          fi
+        else
+          # The install.sh script creates path ${prefix_dir}/bin
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        fi
 
     - id: exec
       if: inputs.call != '' || inputs.args != ''
