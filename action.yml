@@ -71,8 +71,8 @@ runs:
 
         if [[ -x "$(command -v dagger)" ]]; then
           pre_installed_version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
-          if [[ "$pre_installed_version" != "$DAGGER_VERSION" ]]; then
-            echo "dagger ${pre_installed_version} is installed, but needed ${DAGGER_VERSION}"
+          if [[ "$pre_installed_version" != "$VERSION" ]]; then
+            echo "dagger ${pre_installed_version} is installed, but needed ${VERSION}"
             exit 1
           fi
         else
