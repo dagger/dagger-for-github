@@ -59,14 +59,10 @@ runs:
         fi
         printf '%s/bin' "$prefix_dir" >> $GITHUB_PATH
 
-        # If the dagger version is 'latest', set the version back to an empty
-        # string. This allows the install script to detect and install the latest
-        # version itself
+        # A version of 'latest' is respected in the install.sh script
         # We remove any leading 'v' on VERSION here to ensure a match
         VERSION=${{ inputs.version }}
-        if [[ "$VERSION" == "latest" ]]; then
-          VERSION=
-        else
+        if [[ "$VERSION" != "latest" ]]; then
           VERSION=$(echo -n $VERSION | cut -d' ' -f2 | cut -dv -f2 | tr -d '\n')
         fi
 
