@@ -4,7 +4,7 @@ inputs:
   version:
     description: "Dagger Version"
     required: false
-    default: "0.15.1"
+    default: "0.15.2"
   commit:
     description: "Dagger Dev Commit"
     required: false
