@@ -23,7 +23,7 @@
     verb: run
     args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "0.15.3"
+    version: "0.15.4"
 ```
 
 ### Staying in sync with the `latest` version
@@ -34,7 +34,7 @@ By setting the version to `latest`, this action will install the latest version 
 
 | Key            | Description                                                 | Required | Default            |
 | -------------- | ----------------------------------------------------------- | -------- | ------------------ |
-| `version`      | Dagger Version                                              | false    | '0.15.3'           |
+| `version`      | Dagger Version                                              | false    | '0.15.4'           |
 | `commit`       | Dagger Dev Commit (overrides `version`)                     | false    | ''                 |
 | `dagger-flags` | Dagger CLI Flags                                            | false    | '--progress plain' |
 | `verb`         | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'             |
