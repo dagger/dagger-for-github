@@ -1,8 +1,7 @@
 {
   "name": "dagger-for-github",
-  "engineVersion": "v0.15.4",
+  "engineVersion": "v0.16.1",
   "sdk": {
     "source": "go"
-  },
-  "source": "."
+  }
 }
