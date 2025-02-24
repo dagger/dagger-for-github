@@ -59,19 +59,27 @@ runs:
         fi
         printf '%s/bin' "$prefix_dir" >> $GITHUB_PATH
 
-        # If the dagger version is 'latest', set the version back to an empty
-        # string. This allows the install script to detect and install the latest
-        # version itself
+        # A version of 'latest' is respected in the install.sh script
+        # We remove any leading 'v' on VERSION here to ensure a match
         VERSION=${{ inputs.version }}
-        if [[ "$VERSION" == "latest" ]]; then
-          VERSION=
+        if [[ "$VERSION" != "latest" ]]; then
+          VERSION=$(echo -n $VERSION | cut -d' ' -f2 | cut -dv -f2 | tr -d '\n')
         fi
 
         COMMIT=${{ inputs.commit }}
 
-        # The install.sh script creates path ${prefix_dir}/bin
-        curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        if [[ -x "$(command -v dagger)" ]]; then
+          # get dagger version without leading 'v' and always without newline
+          pre_installed_version="$(dagger --silent version | cut -d' ' -f2 | cut -dv -f2 | tr -d '\n')"
+          if [[ "$pre_installed_version" != "$VERSION" ]]; then
+            echo "dagger ${pre_installed_version} is installed, but needed ${VERSION}"
+            exit 1
+          fi
+        else
+          # The install.sh script creates path ${prefix_dir}/bin
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        fi
 
     - id: exec
       if: inputs.call != '' || inputs.args != ''
