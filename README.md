@@ -6,24 +6,25 @@
 
 ```yaml
 - name: Hello
-  uses: dagger/dagger-for-github@v6
+  uses: dagger/dagger-for-github@8.0.0
   with:
     module: github.com/shykes/daggerverse/hello
     call: hello --greeting Hola --name Jeremy
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+    version: "latest"  # semver x.y.z
 ```
 
 ### `dagger run`
 
 ```yaml
 - name: Integration Test
-  uses: dagger/dagger-for-github@v6
+  uses: dagger/dagger-for-github@8.0.0
   with:
     workdir: db-service
     verb: run
     args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "0.16.1"
+    version: "latest"  # semver x.y.z
 ```
 
 ### Staying in sync with the `latest` version
@@ -34,7 +35,7 @@ By setting the version to `latest`, this action will install the latest version 
 
 | Key            | Description                                                 | Required | Default            |
 | -------------- | ----------------------------------------------------------- | -------- | ------------------ |
-| `version`      | Dagger Version                                              | false    | '0.16.1'           |
+| `version`      | Dagger Version                                              | true    | n/a use semver x.y.z or 'latest'
 | `commit`       | Dagger Dev Commit (overrides `version`)                     | false    | ''                 |
 | `dagger-flags` | Dagger CLI Flags                                            | false    | '--progress plain' |
 | `verb`         | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'             |
