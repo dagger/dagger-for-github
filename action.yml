@@ -3,8 +3,7 @@ description: "Run dagger commands in Github Actions"
 inputs:
   version:
     description: "Dagger Version"
-    required: false
-    default: "0.16.1"
+    required: true
   commit:
     description: "Dagger Dev Commit"
     required: false
