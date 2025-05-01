@@ -79,13 +79,23 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
-        cd ${{ inputs.workdir }} && { \
+        cd ${{ inputs.workdir }}
+
+        # Preprocess args: replace backslash-newline with space, then split into array
+        if [[ -n "${{ inputs.args }}" ]]; then
+          ARGS=$(echo "${{ inputs.args }}" | awk '{sub(/[ \t]*\\$/, ""); printf "%s", $0; if (!/[ \t]*\\$/) print ""}')
+          read -r -a ARGS_ARRAY <<< "$ARGS"
+        else
+          ARGS_ARRAY=()
+        fi
+
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call }}; } | tee "${tmpout}"
+        "${ARGS_ARRAY[@]}" \
+        ${{ inputs.call }} | tee "${tmpout}"
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
