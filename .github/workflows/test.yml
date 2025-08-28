@@ -80,6 +80,47 @@ jobs:
             exit 1
           fi
 
+  traceurl:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "TraceURL with cloud-token"
+        id: traceurl-token
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: version
+          cloud-token: dag_dagger_sBIv6DsjNerWvTqt2bSFeigBUqWxp9bhh3ONSSgeFnw
+      - name: "Check traceURL output (should be set)"
+        run: |
+          url='${{ steps.traceurl-token.outputs.traceURL }}'
+          if [[ "$url" =~ ^https://dagger.cloud/.+/traces/.+ ]]; then
+            echo "traceURL found: $url"
+            exit 0
+          else
+            echo "traceURL not found"
+            exit 1
+          fi
+      - name: "TraceURL without cloud-token"
+        id: traceurl-nil
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: version
+      - name: "Check traceURL output (should NOT be set)"
+        run: |
+          url='${{ steps.traceurl-nil.outputs.traceURL }}'
+          if [[ "$url" =~ ^https://dagger.cloud/traces/setup ]]; then
+            echo "traceURL correctly not set"
+            exit 0
+          else
+            echo "traceURL was set: $url"
+            exit 1
+          fi
+
+
   version:
     runs-on: "ubuntu-latest"
     steps:
@@ -156,6 +197,7 @@ jobs:
             echo "does not match"
             exit 1
           fi
+
   call:
     runs-on: "ubuntu-latest"
     steps:
@@ -176,6 +218,7 @@ jobs:
             echo "does not match"
             exit 1
           fi
+
   nocall:
     runs-on: "ubuntu-latest"
     steps:
@@ -185,3 +228,4 @@ jobs:
       - name: "Test Install"
         run: |
           dagger core version
+
