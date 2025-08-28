@@ -44,6 +44,9 @@ outputs:
   output:
     description: "Job output"
     value: ${{ steps.exec.outputs.stdout }}
+  traceURL:
+    description: "Dagger Cloud trace URL"
+    value: ${{ steps.exec.outputs.traceURL }}
 runs:
   using: "composite"
   steps:
@@ -79,13 +82,14 @@ runs:
         INPUT_MODULE: ${{ inputs.module }}
       run: |
         tmpout=$(mktemp)
+        tmperr=$(mktemp)
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
         ${{ inputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call }}; } | tee "${tmpout}"
+        ${{ inputs.args || inputs.call }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
@@ -97,6 +101,12 @@ runs:
           echo
           echo "${delim}"
         } >> "$GITHUB_OUTPUT"
+
+        # Extract trace URL from stderr and set as traceURL output
+        trace_url=$((grep -Eo 'https://dagger.cloud(/[^ ]+/traces/[a-zA-Z0-9]+|/traces/setup)' "${tmperr}" || true) | head -n1)
+        if [[ -n "$trace_url" ]]; then
+          echo "traceURL=$trace_url" >> "$GITHUB_OUTPUT"
+        fi
 
     - if: (inputs.call != '' || inputs.args != '') && inputs.engine-stop == 'true'
       shell: bash
