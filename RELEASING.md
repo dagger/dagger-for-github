@@ -22,12 +22,14 @@ separate `v8` tag. Should automatically get `v8`, `v8.0`, `v8.0.0` as well as
 
 ```console
 # Find the latest released patch https://github.com/dagger/dagger-for-github/releases
-# or via the `gh` CLI. Use that to figure out the NEXT_PATCH_VERSION.
+# or via the `gh` CLI. Use that to figure out the NEXT_VERSION.
 gh release view --repo dagger/dagger-for-github --json tagName,publishedAt
 
+NEXT_VERSION=vX.Y.Z # e.g. v1.2.3
+
 # Sign the tag, using the date as the comment, e.g. 2024-07-22
-git tag --sign -m $(date '+%Y-%m-%d') <NEXT_PATCH_VERSION>
-git push origin <NEXT_PATCH_VERSION> #shouldn't need to force since new tag
+git tag --sign -m $(date '+%Y-%m-%d') $NEXT_VERSION
+git push origin $NEXT_VERSION #shouldn't need to force since new tag
 ```
 
 - [ ] Create a new release from the patch tag (auto-fill release notes via the
