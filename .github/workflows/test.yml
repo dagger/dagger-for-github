@@ -150,6 +150,7 @@ jobs:
           version: v0.13.5
           verb: core
           args: version
+          force-install: true
       - name: "Use v0.13.5 (check)"
         run: |
           target='${{ steps.use-v0-13-5.outputs.output }}'
@@ -168,6 +169,7 @@ jobs:
           commit: 540b4d1490f253054140f9249e823adf111e1c06
           verb: core
           args: version
+          force-install: true
       - name: "Use commit (check)"
         run: |
           target='${{ steps.use-commit.outputs.output }}'
@@ -186,6 +188,7 @@ jobs:
           commit: head
           verb: core
           args: version
+          force-install: true
       - name: "Use head (check)"
         run: |
           target='${{ steps.use-commit.outputs.output }}'
