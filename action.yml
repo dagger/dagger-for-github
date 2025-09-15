@@ -34,6 +34,7 @@ inputs:
     default: ""
   engine-stop:
     description: "Deprecated"
+    deprecationMessage: "engine-stop is now a no-op and will be removed in a future release"
     required: false
   call:
     description: "Function and arguments for dagger call"
