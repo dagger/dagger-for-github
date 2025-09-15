@@ -11,7 +11,7 @@
     module: github.com/shykes/daggerverse/hello
     call: hello --greeting Hola --name Jeremy
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "latest"  # semver x.y.z
+    version: "latest"  # semver vX.Y.Z
 ```
 
 ### `dagger run`
@@ -24,7 +24,7 @@
     verb: run
     args: node build.js
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
-    version: "latest"  # semver x.y.z
+    version: "latest"  # semver vX.Y.Z
 ```
 
 ### Staying in sync with the `latest` version
@@ -44,4 +44,3 @@ By setting the version to `latest`, this action will install the latest version 
 | `module`       | Dagger module to call. Local or Git                         | false    | ''                 |
 | `args`         | Arguments to pass to CLI                                    | false    | ''                 |
 | `call`         | Arguments to pass to CLI (Alias for args)                   | false    | ''                 |
-| `engine-stop`  | Whether to stop the Dagger Engine after this run            | false    | 'true'             |

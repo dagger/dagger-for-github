@@ -33,9 +33,8 @@ inputs:
     required: false
     default: ""
   engine-stop:
-    description: "Whether to stop the Dagger Engine after this run"
+    description: "Deprecated"
     required: false
-    default: "true"
   call:
     description: "Function and arguments for dagger call"
     required: false
@@ -106,12 +105,4 @@ runs:
         trace_url=$((grep -Eo 'https://dagger.cloud(/[^ ]+/traces/[a-zA-Z0-9]+|/traces/setup)' "${tmperr}" || true) | head -n1)
         if [[ -n "$trace_url" ]]; then
           echo "traceURL=$trace_url" >> "$GITHUB_OUTPUT"
-        fi
-
-    - if: (inputs.call != '' || inputs.args != '') && inputs.engine-stop == 'true'
-      shell: bash
-      run: |
-        mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
-        if [[ "${#containers[@]}" -gt 0 ]]; then
-          docker stop -t 300 "${containers[@]}";
         fi
