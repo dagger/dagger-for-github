@@ -2,8 +2,9 @@ name: "Dagger for GitHub"
 description: "Run dagger commands in Github Actions"
 inputs:
   version:
-    description: "Dagger Version"
-    required: true
+    description: "Dagger Version. Use semver vX.Y.Z or 'latest'"
+    required: false
+    default: "latest"
   commit:
     description: "Dagger Dev Commit"
     required: false
@@ -36,6 +37,10 @@ inputs:
     description: "Whether to stop the Dagger Engine after this run"
     required: false
     default: "true"
+  force-install:
+    description: "Force installation even if an existing dagger installation exists"
+    required: false
+    default: "false"
   call:
     description: "Function and arguments for dagger call"
     required: false
@@ -71,9 +76,14 @@ runs:
 
         COMMIT=${{ inputs.commit }}
 
-        # The install.sh script creates path ${prefix_dir}/bin
-        curl -fsS https://dl.dagger.io/dagger/install.sh \
-        | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        FORCE=${{ inputs.force-install }}
+        if [[ "$FORCE" != true && -f "$(command -v dagger)" ]]; then
+          echo "dagger is already installed. To force installation, set force-install: true"
+        else
+          # The install.sh script creates path ${prefix_dir}/bin
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        fi
 
     - id: exec
       if: inputs.call != '' || inputs.args != ''

@@ -33,15 +33,16 @@ By setting the version to `latest`, this action will install the latest version 
 
 ### All `with:` input parameter options
 
-| Key            | Description                                                 | Required | Default            |
-| -------------- | ----------------------------------------------------------- | -------- | ------------------ |
-| `version`      | Dagger Version                                              | true    | n/a use semver x.y.z or 'latest'
-| `commit`       | Dagger Dev Commit (overrides `version`)                     | false    | ''                 |
-| `dagger-flags` | Dagger CLI Flags                                            | false    | '--progress plain' |
-| `verb`         | CLI verb (call, run, download, up, functions, shell, query) | false    | 'call'             |
-| `workdir`      | The working directory in which to run the Dagger CLI        | false    | '.'                |
-| `cloud-token`  | Dagger Cloud Token                                          | false    | ''                 |
-| `module`       | Dagger module to call. Local or Git                         | false    | ''                 |
-| `args`         | Arguments to pass to CLI                                    | false    | ''                 |
-| `call`         | Arguments to pass to CLI (Alias for args)                   | false    | ''                 |
-| `engine-stop`  | Whether to stop the Dagger Engine after this run            | false    | 'true'             |
+| Key                   | Description                                                       | Required | Default            |
+| --------------------- | ----------------------------------------------------------------- | -------- | ------------------ |
+| `version`             | Dagger Version. Use semver vX.Y.Z or 'latest'                     | false    | 'latest'           |
+| `commit`              | Dagger Dev Commit (overrides `version`)                           | false    | ''                 |
+| `dagger-flags`        | Dagger CLI Flags                                                  | false    | '--progress plain' |
+| `verb`                | CLI verb (call, run, download, up, functions, shell, query)       | false    | 'call'             |
+| `workdir`             | The working directory in which to run the Dagger CLI              | false    | '.'                |
+| `cloud-token`         | Dagger Cloud Token                                                | false    | ''                 |
+| `module`              | Dagger module to call. Local or Git                               | false    | ''                 |
+| `args`                | Arguments to pass to CLI                                          | false    | ''                 |
+| `call`                | Arguments to pass to CLI (Alias for args)                         | false    | ''                 |
+| `engine-stop`         | Whether to stop the Dagger Engine after this run                  | false    | 'true'             |
+| `force-install`       | Force installation even if an existing dagger installation exists | false    | 'false'            |

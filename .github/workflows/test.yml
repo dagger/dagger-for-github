@@ -120,7 +120,6 @@ jobs:
             exit 1
           fi
 
-
   version:
     runs-on: "ubuntu-latest"
     steps:
@@ -229,3 +228,45 @@ jobs:
         run: |
           dagger core version
 
+  existing-install:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "preinstall dagger"
+        run: |
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=/usr/local/bin DAGGER_VERSION="v0.18.17" sh
+      - name: "Install with version"
+        uses: ./
+        with:
+          version: "v0.18.16"
+      - name: "Test Install"
+        run: |
+          if [[ "$(dagger core version)" == "v0.18.17" ]]; then
+            exit 0
+          else
+            echo "Existing install was overridden without force"
+            exit 1
+          fi
+
+  existing-install-force:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "preinstall dagger"
+        run: |
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=/usr/local/bin DAGGER_VERSION="v0.18.17" sh
+      - name: "Install with version"
+        uses: ./
+        with:
+          version: "v0.18.16"
+          force-install: true
+      - name: "Test Install"
+        run: |
+          if [[ "$(dagger core version)" == "v0.18.16" ]]; then
+            exit 0
+          else
+            echo "Failed to overwrite existing install"
+            exit 1
+          fi
