@@ -226,12 +226,11 @@ jobs:
         id: test-shell
         uses: ./
         with:
-          shell: 'container | from alpine | with-exec echo,"hello world!" | stdout'
+          shell: 'container | from alpine | with-exec echo,-n,"hello world!" | stdout'
       - name: "Test shell (check)"
         run: |
           target='${{ steps.test-shell.outputs.output }}'
-          result='hello world!
-          ' # shell appears to emit an extra newline compared to call
+          result='hello world!'
           if [[ "$target" == "$result" ]]; then
             echo "matches"
             exit 0
