@@ -40,6 +40,10 @@ inputs:
     description: "Function and arguments for dagger call"
     required: false
     default: ""
+  shell:
+    description: "Function and arguments for dagger shell"
+    required: false
+    default: ""
 outputs:
   output:
     description: "Job output"
@@ -75,8 +79,25 @@ runs:
         curl -fsS https://dl.dagger.io/dagger/install.sh \
         | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
 
+    - id: assemble
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      shell: bash
+      env:
+        INPUT_MODULE: ${{ inputs.module }}
+      run: |
+        verb=${{ inputs.verb }}
+        shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
+        if [[ -n "${{ inputs.call }}" ]]; then
+          verb="call"
+        elif [[ "$shell" != "" ]]; then
+          verb=""
+          script=$(mktemp)
+          printf '%s' "$shell" > $script
+        fi
+        echo "script=$script" >> "$GITHUB_OUTPUT"
+        echo "verb=$verb" >> "$GITHUB_OUTPUT"
     - id: exec
-      if: inputs.call != '' || inputs.args != ''
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
@@ -87,9 +108,9 @@ runs:
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
-        ${{ inputs.verb }} \
+        ${{ steps.assemble.outputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the

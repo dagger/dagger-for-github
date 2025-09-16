@@ -120,7 +120,6 @@ jobs:
             exit 1
           fi
 
-
   version:
     runs-on: "ubuntu-latest"
     steps:
@@ -219,6 +218,27 @@ jobs:
             exit 1
           fi
 
+  shell:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test shell"
+        id: test-shell
+        uses: ./
+        with:
+          shell: 'container | from alpine | with-exec echo,-n,"hello world!" | stdout'
+      - name: "Test shell (check)"
+        run: |
+          target='${{ steps.test-shell.outputs.output }}'
+          result='hello world!'
+          if [[ "$target" == "$result" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
   nocall:
     runs-on: "ubuntu-latest"
     steps:
@@ -228,4 +248,3 @@ jobs:
       - name: "Test Install"
         run: |
           dagger core version
-
