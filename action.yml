@@ -34,7 +34,8 @@ inputs:
     required: false
     default: ""
   engine-stop:
-    description: "Whether to stop the Dagger Engine after this run"
+    description: "Deprecated"
+    deprecationMessage: "engine-stop is now a no-op and will be removed in a future release"
     required: false
     default: "true"
   force-install:
@@ -43,6 +44,10 @@ inputs:
     default: "false"
   call:
     description: "Function and arguments for dagger call"
+    required: false
+    default: ""
+  shell:
+    description: "Function and arguments for dagger shell"
     required: false
     default: ""
 outputs:
@@ -85,8 +90,25 @@ runs:
           | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
         fi
 
+    - id: assemble
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      shell: bash
+      env:
+        INPUT_MODULE: ${{ inputs.module }}
+      run: |
+        verb=${{ inputs.verb }}
+        shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
+        if [[ -n "${{ inputs.call }}" ]]; then
+          verb="call"
+        elif [[ "$shell" != "" ]]; then
+          verb=""
+          script=$(mktemp)
+          printf '%s' "$shell" > $script
+        fi
+        echo "script=$script" >> "$GITHUB_OUTPUT"
+        echo "verb=$verb" >> "$GITHUB_OUTPUT"
     - id: exec
-      if: inputs.call != '' || inputs.args != ''
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
@@ -97,9 +119,9 @@ runs:
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
-        ${{ inputs.verb }} \
+        ${{ steps.assemble.outputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
@@ -116,12 +138,4 @@ runs:
         trace_url=$((grep -Eo 'https://dagger.cloud(/[^ ]+/traces/[a-zA-Z0-9]+|/traces/setup)' "${tmperr}" || true) | head -n1)
         if [[ -n "$trace_url" ]]; then
           echo "traceURL=$trace_url" >> "$GITHUB_OUTPUT"
-        fi
-
-    - if: (inputs.call != '' || inputs.args != '') && inputs.engine-stop == 'true'
-      shell: bash
-      run: |
-        mapfile -t containers < <(docker ps --filter name="dagger-engine-*" -q)
-        if [[ "${#containers[@]}" -gt 0 ]]; then
-          docker stop -t 300 "${containers[@]}";
         fi
