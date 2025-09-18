@@ -266,6 +266,48 @@ jobs:
           if [[ "$(dagger core version)" == "v0.18.16" ]]; then
             exit 0
           else
-            echo "Existing install was overridden without force"
+            echo "Existing install was not overridden"
+            exit 1
+          fi
+
+  commit-install:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "preinstall dagger"
+        run: |
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=/usr/local/bin DAGGER_VERSION="v0.18.17" sh
+      - name: "Install with version"
+        uses: ./
+        with:
+          commit: "f325d1ff460175d2062609f4358ab11e3ab66731"
+      - name: "Test Install"
+        run: |
+          if [[ "$(dagger version)" == *"v0.18.19-250918123923-71f2e104b045"* ]]; then
+            exit 0
+          else
+            echo "Existing install was not overridden"
+            exit 1
+          fi
+
+  latest-install:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "preinstall dagger"
+        run: |
+          curl -fsS https://dl.dagger.io/dagger/install.sh \
+          | BIN_DIR=/usr/local/bin DAGGER_VERSION="v0.18.17" sh
+      - name: "Install with version"
+        uses: ./
+        with:
+          version: "latest"
+      - name: "Test Install"
+        run: |
+          if [[ "$(dagger version)" != "v0.18.17" ]]; then
+            exit 0
+          else
+            echo "Existing install was not overridden with latest"
             exit 1
           fi

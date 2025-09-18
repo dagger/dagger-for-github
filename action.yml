@@ -73,6 +73,7 @@ runs:
         if [[ "$VERSION" == "latest" ]]; then
           VERSION=
         fi
+        latest=$(curl https://dl.dagger.io/dagger/versions/latest)
 
         COMMIT=${{ inputs.commit }}
 
@@ -80,7 +81,7 @@ runs:
           echo "::group::Checking dagger"
           version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
           echo "Found existing dagger version: $version"
-          if [[ "$version" == "$VERSION" ]]; then
+          if [[ "$version" == "$VERSION" ]] || [[ "$version" == "$latest" ]]; then
             echo "dagger ${version} is already installed, skipping installation"
             exit 0
           fi
