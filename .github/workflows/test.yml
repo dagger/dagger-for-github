@@ -281,7 +281,7 @@ jobs:
       - name: "Install with version"
         uses: ./
         with:
-          commit: "f325d1ff460175d2062609f4358ab11e3ab66731"
+          commit: "71f2e104b045ddc3b0cc611b81370707bf21bc27"
       - name: "Test Install"
         run: |
           if [[ "$(dagger version)" == *"v0.18.19-250918123923-71f2e104b045"* ]]; then
