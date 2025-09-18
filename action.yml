@@ -80,17 +80,18 @@ runs:
         if [[ -x "$(command -v dagger)" ]]; then
           echo "::group::Checking dagger"
           version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
+          echo "Found existing dagger version: $version"
           if [[ "$version" == "$VERSION" ]]; then
             echo "dagger ${version} is already installed, skipping installation"
             exit 0
           fi
           echo "::endgroup::"
-        else
-          echo "::group::Installing dagger"
-          curl -fsSL https://dl.dagger.io/dagger/install.sh | \
-          BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
-          echo "::endgroup::"
         fi
+
+        echo "::group::Installing dagger"
+        curl -fsSL https://dl.dagger.io/dagger/install.sh | \
+        BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        echo "::endgroup::"
 
     - id: assemble
       if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
