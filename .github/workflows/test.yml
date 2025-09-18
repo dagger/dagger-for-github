@@ -150,7 +150,6 @@ jobs:
           version: v0.13.5
           verb: core
           args: version
-          force-install: true
       - name: "Use v0.13.5 (check)"
         run: |
           target='${{ steps.use-v0-13-5.outputs.output }}'
@@ -169,7 +168,6 @@ jobs:
           commit: 540b4d1490f253054140f9249e823adf111e1c06
           verb: core
           args: version
-          force-install: true
       - name: "Use commit (check)"
         run: |
           target='${{ steps.use-commit.outputs.output }}'
@@ -188,7 +186,6 @@ jobs:
           commit: head
           verb: core
           args: version
-          force-install: true
       - name: "Use head (check)"
         run: |
           target='${{ steps.use-commit.outputs.output }}'
@@ -266,7 +263,7 @@ jobs:
           version: "v0.18.16"
       - name: "Test Install"
         run: |
-          if [[ "$(dagger core version)" == "v0.18.17" ]]; then
+          if [[ "$(dagger core version)" == "v0.18.16" ]]; then
             exit 0
           else
             echo "Existing install was overridden without force"
@@ -285,7 +282,6 @@ jobs:
         uses: ./
         with:
           version: "v0.18.16"
-          force-install: true
       - name: "Test Install"
         run: |
           if [[ "$(dagger core version)" == "v0.18.16" ]]; then

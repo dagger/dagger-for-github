@@ -55,4 +55,3 @@ By setting the version to `latest`, this action will install the latest version 
 | `args`          | Arguments to pass to CLI                                          | false    | ''                 |
 | `call`          | Arguments to pass to CLI (Alias for args with verb:call)          | false    | ''                 |
 | `shell`         | Arguments to pass to CLI (Alias for args with verb:shell)         | false    | ''                 |
-| `force-install` | Force installation even if an existing dagger installation exists | false    | 'false'            |

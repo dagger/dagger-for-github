@@ -38,10 +38,6 @@ inputs:
     deprecationMessage: "engine-stop is now a no-op and will be removed in a future release"
     required: false
     default: "true"
-  force-install:
-    description: "Force installation even if an existing dagger installation exists"
-    required: false
-    default: "false"
   call:
     description: "Function and arguments for dagger call"
     required: false
@@ -81,13 +77,19 @@ runs:
 
         COMMIT=${{ inputs.commit }}
 
-        FORCE=${{ inputs.force-install }}
-        if [[ "$FORCE" != true && -f "$(command -v dagger)" ]]; then
-          echo "dagger is already installed. To force installation, set force-install: true"
+        if [[ -x "$(command -v dagger)" ]]; then
+          echo "::group::Checking dagger"
+          version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
+          if [[ "$version" == "$VERSION" ]]; then
+            echo "dagger ${version} is already installed, skipping installation"
+            exit 0
+          fi
+          echo "::endgroup::"
         else
-          # The install.sh script creates path ${prefix_dir}/bin
-          curl -fsS https://dl.dagger.io/dagger/install.sh \
-          | BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+          echo "::group::Installing dagger"
+          curl -fsSL https://dl.dagger.io/dagger/install.sh | \
+          BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+          echo "::endgroup::"
         fi
 
     - id: assemble
