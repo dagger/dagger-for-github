@@ -6,7 +6,7 @@
 
 ```yaml
 - name: Hello
-  uses: dagger/dagger-for-github@8.0.0
+  uses: dagger/dagger-for-github@v8.1.0
   with:
     module: github.com/shykes/daggerverse/hello
     call: hello --greeting Hola --name Jeremy
@@ -28,7 +28,7 @@
 
 ```yaml
 - name: Integration Test
-  uses: dagger/dagger-for-github@8.0.0
+  uses: dagger/dagger-for-github@v8.1.0
   with:
     workdir: db-service
     verb: run
@@ -55,3 +55,10 @@ By setting the version to `latest`, this action will install the latest version 
 | `args`          | Arguments to pass to CLI                                          | false    | ''                 |
 | `call`          | Arguments to pass to CLI (Alias for args with verb:call)          | false    | ''                 |
 | `shell`         | Arguments to pass to CLI (Alias for args with verb:shell)         | false    | ''                 |
+
+### All output variables
+
+| Key        | Description                                                 |
+| ---------- | ----------------------------------------------------------- |
+| `stdout`   | The standard output of the Dagger command                   |
+| `traceURL` | Dagger Cloud trace URL                                      |
