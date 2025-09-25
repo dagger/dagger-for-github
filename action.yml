@@ -45,6 +45,14 @@ inputs:
     description: "Function and arguments for dagger shell"
     required: false
     default: ""
+  summary-path:
+    description: "File path to write the job summary"
+    required: false
+    default: ""
+  enable-github-summary:
+    description: "Whether to write summary to GITHUB_STEP_SUMMARY"
+    required: false
+    default: "false"
 outputs:
   output:
     description: "Job output"
@@ -115,6 +123,9 @@ runs:
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
+        VERB: ${{ steps.assemble.outputs.verb }}
+        CMD: ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}
+        SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
         tmperr=$(mktemp)
@@ -141,4 +152,48 @@ runs:
         trace_url=$((grep -Eo 'https://dagger.cloud(/[^ ]+/traces/[a-zA-Z0-9]+|/traces/setup)' "${tmperr}" || true) | head -n1)
         if [[ -n "$trace_url" ]]; then
           echo "traceURL=$trace_url" >> "$GITHUB_OUTPUT"
+        fi
+
+        # Generate job summary content
+        summary_content(){
+          echo -e "## Command\n"
+          echo '```bash'
+          cmd="dagger $VERB $CMD"
+          if [[ -n "$INPUT_MODULE" ]]; then
+            echo -e -E "DAGGER_MODULE=\"$INPUT_MODULE\" $cmd"
+          else
+            echo -e -E "$cmd"
+          fi
+          echo '```'
+          if [[ -n "$SCRIPT" ]]; then
+            echo -e "### Script\n"
+            echo '```bash'
+            cat "$SCRIPT"
+            echo -e "\n"
+            echo '```'
+          fi
+
+          echo -e "## Dagger trace\n"
+          if [[ -n "$trace_url" ]]; then
+            echo "[$trace_url]($trace_url)"
+          else
+            echo "No trace available. To setup: [https://dagger.cloud/traces/setup](https://dagger.cloud/traces/setup)"
+          fi
+
+          echo -e "## Dagger version\n"
+          echo '```bash'
+          dagger version || true
+          echo '```'
+
+          echo -e "---\n"
+        }
+
+        # Write to custom summary path if specified
+        if [[ -n "${{ inputs.summary-path }}" ]]; then
+          summary_content > "${{ inputs.summary-path }}"
+        fi
+
+        # Write to GitHub step summary if enabled (default: true)
+        if [[ "${{ inputs.enable-github-summary }}" == "true" ]]; then
+          summary_content > "${GITHUB_STEP_SUMMARY}"
         fi
