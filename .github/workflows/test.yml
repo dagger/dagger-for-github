@@ -239,6 +239,49 @@ jobs:
             exit 1
           fi
 
+  summary-path:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test summary-path"
+        id: test-summary-path
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: version
+          summary-path: "/tmp/custom-summary.md"
+      - name: "Check custom summary file"
+        run: |
+          if [[ -f "/tmp/custom-summary.md" ]] && [[ -s "/tmp/custom-summary.md" ]]; then
+            echo "Custom summary file exists and has content"
+            echo "Content preview:"
+            head -10 "/tmp/custom-summary.md"
+          else
+            echo "Custom summary file missing or empty"
+            exit 1
+          fi
+
+  enable-github-summary:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test enable-github-summary=true (default)"
+        id: test-github-summary-enabled
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: version
+      - name: "Check github summary enabled"
+        run: |
+          if [[ -n "${GITHUB_STEP_SUMMARY}" ]]; then
+            echo "GitHub step summary was written (default behavior)"
+          else
+            echo "GitHub step summary not written when it should have been"
+            exit 1
+          fi
+
   nocall:
     runs-on: "ubuntu-latest"
     steps:
