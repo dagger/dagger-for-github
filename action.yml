@@ -80,6 +80,9 @@ runs:
         VERSION=${{ inputs.version }}
         if [[ "$VERSION" == "latest" ]]; then
           VERSION=
+        elif [[ -n "$VERSION" && "$VERSION" != v* ]]; then
+          # Add 'v' prefix if version doesn't start with 'v' and is not empty
+          VERSION="v$VERSION"
         fi
         latest=$(curl https://dl.dagger.io/dagger/versions/latest)
 
