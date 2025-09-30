@@ -161,6 +161,24 @@ jobs:
             exit 1
           fi
 
+      - name: "Use 0.13.5 (no v)"
+        id: use-0-13-5
+        uses: ./
+        with:
+          version: 0.13.5
+          verb: core
+          args: version
+      - name: "Use 0.13.5 (check)"
+        run: |
+          target='${{ steps.use-0-13-5.outputs.output }}'
+          if [[ "$target" =~ v0\.13\.5 ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match"
+            exit 1
+          fi
+
       - name: "Use commit"
         id: use-commit
         uses: ./
