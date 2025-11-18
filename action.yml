@@ -112,6 +112,9 @@ runs:
       run: |
         verb=${{ inputs.verb }}
         shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
+        dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj .)
+        args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj .)
+        call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
         elif [[ "$shell" != "" ]]; then
@@ -121,13 +124,16 @@ runs:
         fi
         echo "script=$script" >> "$GITHUB_OUTPUT"
         echo "verb=$verb" >> "$GITHUB_OUTPUT"
+        echo "dagger-flags=$dagger_flags" >> "$GITHUB_OUTPUT"
+        echo "args=$args" >> "$GITHUB_OUTPUT"
+        echo "call=$call" >> "$GITHUB_OUTPUT"
     - id: exec
       if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}
+        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
@@ -135,10 +141,10 @@ runs:
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
-        ${{ inputs.dagger-flags }} \
+        ${{ steps.assemble.outputs.dagger-flags }} \
         ${{ steps.assemble.outputs.verb }} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
