@@ -108,8 +108,19 @@ runs:
         BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
         echo "::endgroup::"
 
+    - id: should-exec
+      shell: bash
+      run: |
+        # Determine if the user wants to execute a dagger command or just install
+        if [[ -n "${{ inputs.call }}" ]] || \
+           [[ -n "${{ inputs.shell }}" ]] || \
+           [[ -n "${{ inputs.args }}" ]] || \
+           [[ -n "${{ inputs.check }}" ]] || \
+           [[ "${{ inputs.verb }}" != "call" ]]; then
+          echo "result=true" >> "$GITHUB_OUTPUT"
+        fi
     - id: assemble
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != '' || inputs.check != ''
+      if: steps.should-exec.outputs.result == 'true'
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
@@ -119,10 +130,13 @@ runs:
         dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj .)
         args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj .)
         call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
+        check=$(echo '${{ toJSON(inputs.check) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
-        elif [[ "${{ inputs.check }}" != "" ]]; then
+        elif [[ -n "$check" ]]; then
           verb="check"
+          # check input is used as a trigger; don't pass glob patterns as args
+          check=""
         elif [[ "$shell" != "" ]]; then
           verb=""
           script=$(mktemp)
@@ -133,13 +147,14 @@ runs:
         echo "dagger-flags=$dagger_flags" >> "$GITHUB_OUTPUT"
         echo "args=$args" >> "$GITHUB_OUTPUT"
         echo "call=$call" >> "$GITHUB_OUTPUT"
+        echo "check=$check" >> "$GITHUB_OUTPUT"
     - id: exec
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != '' || inputs.check != ''
+      if: steps.should-exec.outputs.result == 'true'
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || inputs.check }}
+        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
