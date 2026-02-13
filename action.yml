@@ -116,6 +116,9 @@ runs:
       run: |
         verb=${{ inputs.verb }}
         shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
+        dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj .)
+        args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj .)
+        call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
         elif [[ -n "${{ inputs.check }}" ]]; then
@@ -127,13 +130,16 @@ runs:
         fi
         echo "script=$script" >> "$GITHUB_OUTPUT"
         echo "verb=$verb" >> "$GITHUB_OUTPUT"
+        echo "dagger-flags=$dagger_flags" >> "$GITHUB_OUTPUT"
+        echo "args=$args" >> "$GITHUB_OUTPUT"
+        echo "call=$call" >> "$GITHUB_OUTPUT"
     - id: exec
       if: inputs.call != '' || inputs.shell != '' || inputs.args != '' || inputs.check != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ inputs.args || inputs.call || steps.assemble.outputs.script || inputs.check }}
+        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || inputs.check }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
@@ -141,7 +147,7 @@ runs:
         cd ${{ inputs.workdir }} && { \
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
-        ${{ inputs.dagger-flags }} \
+        ${{ steps.assemble.outputs.dagger-flags }} \
         ${VERB} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
         ${CMD}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
