@@ -239,17 +239,22 @@ jobs:
   check:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          repository: "github.com/kpenfound/dag"
+          ref: "3ea64a3711c2d785db3133dd380ae74ac1440f79"
       - name: "Test check"
         uses: ./
         with:
           module: github.com/kpenfound/dag/hello@3ea64a3711c2d785db3133dd380ae74ac1440f79
           check: "**"
+          workdir: "./hello"
       - name: "Test check"
         uses: ./
         with:
           module: github.com/kpenfound/hello@3ea64a3711c2d785db3133dd380ae74ac1440f79
           verb: "check"
+          workdir: "./hello"
 
   shell:
     runs-on: "ubuntu-latest"
