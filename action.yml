@@ -110,13 +110,19 @@ runs:
 
     - id: should-exec
       shell: bash
+      env:
+        INPUT_CALL: ${{ inputs.call }}
+        INPUT_SHELL: ${{ inputs.shell }}
+        INPUT_ARGS: ${{ inputs.args }}
+        INPUT_CHECK: ${{ inputs.check }}
+        INPUT_VERB: ${{ inputs.verb }}
       run: |
         # Determine if the user wants to execute a dagger command or just install
-        if [[ -n "${{ inputs.call }}" ]] || \
-           [[ -n "${{ inputs.shell }}" ]] || \
-           [[ -n "${{ inputs.args }}" ]] || \
-           [[ -n "${{ inputs.check }}" ]] || \
-           [[ "${{ inputs.verb }}" != "call" ]]; then
+        if [[ -n "$INPUT_CALL" ]] || \
+           [[ -n "$INPUT_SHELL" ]] || \
+           [[ -n "$INPUT_ARGS" ]] || \
+           [[ -n "$INPUT_CHECK" ]] || \
+           [[ "$INPUT_VERB" != "call" ]]; then
           echo "result=true" >> "$GITHUB_OUTPUT"
         fi
     - id: assemble
