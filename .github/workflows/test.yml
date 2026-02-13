@@ -250,6 +250,7 @@ jobs:
         with:
           check: "**"
           workdir: "./dag/hello"
+          enable-github-summary: true
       - name: "Test check"
         uses: ./
         with:

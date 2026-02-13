@@ -14,7 +14,7 @@ inputs:
     required: false
     default: "--progress plain"
   verb:
-    description: "CLI verb (checks, call, run, download, up, functions, shell, query)"
+    description: "CLI verb (check, call, run, download, up, functions, shell, query)"
     required: false
     default: "call"
   workdir:
@@ -121,7 +121,7 @@ runs:
         call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
-        elif [[ -n "${{ inputs.check }}" ]]; then
+        elif [[ "${{ inputs.check }}" != "" ]]; then
           verb="check"
         elif [[ "$shell" != "" ]]; then
           verb=""
