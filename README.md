@@ -8,7 +8,6 @@
 - name: Hello
   uses: dagger/dagger-for-github@v8.3.0
   with:
-    module: github.com/shykes/daggerverse/hello
     check: "**"
     version: "latest"  # semver vX.Y.Z
 ```
