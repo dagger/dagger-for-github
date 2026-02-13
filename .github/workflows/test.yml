@@ -236,6 +236,21 @@ jobs:
             exit 1
           fi
 
+  check:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test check"
+        uses: ./
+        with:
+          module: github.com/kpenfound/dag/hello@3ea64a3711c2d785db3133dd380ae74ac1440f79
+          check: "**"
+      - name: "Test check"
+        uses: ./
+        with:
+          module: github.com/kpenfound/hello@3ea64a3711c2d785db3133dd380ae74ac1440f79
+          verb: "check"
+
   shell:
     runs-on: "ubuntu-latest"
     steps:

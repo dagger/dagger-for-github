@@ -14,7 +14,7 @@ inputs:
     required: false
     default: "--progress plain"
   verb:
-    description: "CLI verb (call, run, download, up, functions, shell, query)"
+    description: "CLI verb (checks, call, run, download, up, functions, shell, query)"
     required: false
     default: "call"
   workdir:
@@ -43,6 +43,10 @@ inputs:
     default: ""
   shell:
     description: "Function and arguments for dagger shell"
+    required: false
+    default: ""
+  check:
+    description: "Function and arguments for dagger checks"
     required: false
     default: ""
   summary-path:
@@ -114,6 +118,8 @@ runs:
         shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
+        elif [[ -n "${{ inputs.check }}" ]]; then
+          verb="check"
         elif [[ "$shell" != "" ]]; then
           verb=""
           script=$(mktemp)
