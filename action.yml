@@ -46,7 +46,7 @@ inputs:
     required: false
     default: ""
   check:
-    description: "Function and arguments for dagger checks"
+    description: "Function and arguments for dagger check"
     required: false
     default: ""
   summary-path:
@@ -109,7 +109,7 @@ runs:
         echo "::endgroup::"
 
     - id: assemble
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != '' || inputs.check != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
@@ -128,12 +128,12 @@ runs:
         echo "script=$script" >> "$GITHUB_OUTPUT"
         echo "verb=$verb" >> "$GITHUB_OUTPUT"
     - id: exec
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      if: inputs.call != '' || inputs.shell != '' || inputs.args != '' || inputs.check != ''
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}
+        CMD: ${{ inputs.args || inputs.call || steps.assemble.outputs.script || inputs.check }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
@@ -142,9 +142,9 @@ runs:
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ inputs.dagger-flags }} \
-        ${{ steps.assemble.outputs.verb }} \
+        ${VERB} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ inputs.args || inputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${CMD}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
