@@ -160,7 +160,6 @@ runs:
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
@@ -171,7 +170,7 @@ runs:
         ${{ steps.assemble.outputs.dagger-flags }} \
         ${VERB} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${CMD}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
@@ -194,7 +193,7 @@ runs:
         summary_content(){
           echo -e "## Command\n"
           echo '```bash'
-          cmd="dagger $VERB $CMD"
+          cmd="dagger $VERB ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}"
           if [[ -n "$INPUT_MODULE" ]]; then
             echo -e -E "DAGGER_MODULE=\"$INPUT_MODULE\" $cmd"
           else
