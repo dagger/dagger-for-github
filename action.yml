@@ -14,7 +14,7 @@ inputs:
     required: false
     default: "--progress plain"
   verb:
-    description: "CLI verb (call, run, download, up, functions, shell, query)"
+    description: "CLI verb (check, call, run, download, up, functions, shell, query)"
     required: false
     default: "call"
   workdir:
@@ -43,6 +43,10 @@ inputs:
     default: ""
   shell:
     description: "Function and arguments for dagger shell"
+    required: false
+    default: ""
+  check:
+    description: "Function and arguments for dagger check"
     required: false
     default: ""
   summary-path:
@@ -104,8 +108,25 @@ runs:
         BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
         echo "::endgroup::"
 
+    - id: should-exec
+      shell: bash
+      env:
+        INPUT_CALL: ${{ inputs.call }}
+        INPUT_SHELL: ${{ inputs.shell }}
+        INPUT_ARGS: ${{ inputs.args }}
+        INPUT_CHECK: ${{ inputs.check }}
+        INPUT_VERB: ${{ inputs.verb }}
+      run: |
+        # Determine if the user wants to execute a dagger command or just install
+        if [[ -n "$INPUT_CALL" ]] || \
+           [[ -n "$INPUT_SHELL" ]] || \
+           [[ -n "$INPUT_ARGS" ]] || \
+           [[ -n "$INPUT_CHECK" ]] || \
+           [[ "$INPUT_VERB" != "call" ]]; then
+          echo "result=true" >> "$GITHUB_OUTPUT"
+        fi
     - id: assemble
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      if: steps.should-exec.outputs.result == 'true'
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
@@ -115,8 +136,13 @@ runs:
         dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj .)
         args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj .)
         call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
+        check=$(echo '${{ toJSON(inputs.check) }}' | jq -rj .)
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
+        elif [[ -n "$check" ]]; then
+          verb="check"
+          # check input is used as a trigger; don't pass glob patterns as args
+          check=""
         elif [[ "$shell" != "" ]]; then
           verb=""
           script=$(mktemp)
@@ -127,13 +153,13 @@ runs:
         echo "dagger-flags=$dagger_flags" >> "$GITHUB_OUTPUT"
         echo "args=$args" >> "$GITHUB_OUTPUT"
         echo "call=$call" >> "$GITHUB_OUTPUT"
+        echo "check=$check" >> "$GITHUB_OUTPUT"
     - id: exec
-      if: inputs.call != '' || inputs.shell != '' || inputs.args != ''
+      if: steps.should-exec.outputs.result == 'true'
       shell: bash
       env:
         INPUT_MODULE: ${{ inputs.module }}
         VERB: ${{ steps.assemble.outputs.verb }}
-        CMD: ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script }}
         SCRIPT: ${{ steps.assemble.outputs.script }}
       run: |
         tmpout=$(mktemp)
@@ -142,9 +168,9 @@ runs:
         DAGGER_CLOUD_TOKEN=${{ inputs.cloud-token }} \
         dagger \
         ${{ steps.assemble.outputs.dagger-flags }} \
-        ${{ steps.assemble.outputs.verb }} \
+        ${VERB} \
         ${INPUT_MODULE:+-m $INPUT_MODULE} \
-        ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
+        ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}; } 1> >(tee "${tmpout}") 2> >(tee "${tmperr}" >&2)
 
         {
           # we need a delim that doesn't appear in the output - a hash of the
@@ -167,7 +193,7 @@ runs:
         summary_content(){
           echo -e "## Command\n"
           echo '```bash'
-          cmd="dagger $VERB $CMD"
+          cmd="dagger $VERB ${{ steps.assemble.outputs.args || steps.assemble.outputs.call || steps.assemble.outputs.script || steps.assemble.outputs.check }}"
           if [[ -n "$INPUT_MODULE" ]]; then
             echo -e -E "DAGGER_MODULE=\"$INPUT_MODULE\" $cmd"
           else

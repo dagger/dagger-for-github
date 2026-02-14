@@ -2,11 +2,23 @@
 
 ## Usage Examples
 
+### `dagger check`
+
+```yaml
+- name: Hello
+  uses: dagger/dagger-for-github@v8.3.0
+  with:
+    check: "**"
+    version: "latest"  # semver vX.Y.Z
+```
+
+Note: As a convenience for `dagger check` you can use the [dagger/checks](https://github.com/dagger/checks) action instead.
+
 ### `dagger call`
 
 ```yaml
 - name: Hello
-  uses: dagger/dagger-for-github@v8.2.0
+  uses: dagger/dagger-for-github@v8.3.0
   with:
     module: github.com/shykes/daggerverse/hello
     call: hello --greeting Hola --name Jeremy
@@ -18,7 +30,7 @@
 
 ```yaml
 - name: Hello
-  uses: dagger/dagger-for-github@v8.2.0
+  uses: dagger/dagger-for-github@v8.3.0
   with:
     shell: container | from alpine | with-exec echo,"hello, world!" | stdout
     cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
@@ -28,7 +40,7 @@
 
 ```yaml
 - name: Integration Test
-  uses: dagger/dagger-for-github@v8.2.0
+  uses: dagger/dagger-for-github@v8.3.0
   with:
     workdir: db-service
     verb: run
@@ -55,6 +67,7 @@ By setting the version to `latest`, this action will install the latest version 
 | `args`                          | Arguments to pass to CLI                                          | false    | ''                 |
 | `call`                          | Arguments to pass to CLI (Alias for args with verb:call)          | false    | ''                 |
 | `shell`                         | Arguments to pass to CLI (Alias for args with verb:shell)         | false    | ''                 |
+| `check`                         | Arguments to pass to CLI (Alias for args with verb:check)         | false    | ''                 |
 | `summary-path`                  | File path to write the job summary to                             | false    | ''                 |
 | `enable-github-summary`         | Whether to automatically write a GitHub Actions job summary       | false    | 'false'            |
 

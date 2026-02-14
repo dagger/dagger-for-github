@@ -236,6 +236,27 @@ jobs:
             exit 1
           fi
 
+  check:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          repository: "kpenfound/dag"
+          ref: "3ea64a3711c2d785db3133dd380ae74ac1440f79"
+          path: "./dag"
+      - name: "Test check"
+        uses: ./
+        with:
+          check: "**"
+          workdir: "./dag/hello"
+          enable-github-summary: true
+      - name: "Test check"
+        uses: ./
+        with:
+          verb: "check"
+          workdir: "./dag/hello"
+
   shell:
     runs-on: "ubuntu-latest"
     steps:
