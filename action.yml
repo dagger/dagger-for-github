@@ -133,10 +133,11 @@ runs:
       run: |
         verb=${{ inputs.verb }}
         shell=$(echo '${{ toJSON(inputs.shell) }}' | jq -rj .)
-        dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj .)
-        args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj .)
-        call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj .)
-        check=$(echo '${{ toJSON(inputs.check) }}' | jq -rj .)
+        # Collapse backslash-continuations and newlines into spaces for CLI args
+        dagger_flags=$(echo '${{ toJSON(inputs.dagger-flags) }}' | jq -rj . | sed -z 's/\\\n/ /g; s/\n/ /g')
+        args=$(echo '${{ toJSON(inputs.args) }}' | jq -rj . | sed -z 's/\\\n/ /g; s/\n/ /g')
+        call=$(echo '${{ toJSON(inputs.call) }}' | jq -rj . | sed -z 's/\\\n/ /g; s/\n/ /g')
+        check=$(echo '${{ toJSON(inputs.check) }}' | jq -rj . | sed -z 's/\\\n/ /g; s/\n/ /g')
         if [[ -n "${{ inputs.call }}" ]]; then
           verb="call"
         elif [[ -n "$check" ]]; then
