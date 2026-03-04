@@ -236,6 +236,58 @@ jobs:
             exit 1
           fi
 
+  call-multiline-backslash:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test call with backslash continuation"
+        id: test-call-backslash
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: |-
+            container \
+            from --address=alpine \
+            with-exec --args echo,-n,"hello world" \
+            stdout
+      - name: "Test call backslash (check)"
+        run: |
+          target='${{ steps.test-call-backslash.outputs.output }}'
+          if [[ "$target" == "hello world" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match: $target"
+            exit 1
+          fi
+
+  call-multiline-newline:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Test call with bare newlines"
+        id: test-call-newline
+        uses: ./
+        with:
+          version: latest
+          verb: core
+          args: |-
+            container
+            from --address=alpine
+            with-exec --args echo,-n,"hello world"
+            stdout
+      - name: "Test call newline (check)"
+        run: |
+          target='${{ steps.test-call-newline.outputs.output }}'
+          if [[ "$target" == "hello world" ]]; then
+            echo "matches"
+            exit 0
+          else
+            echo "does not match: $target"
+            exit 1
+          fi
+
   check:
     runs-on: "ubuntu-latest"
     steps:
