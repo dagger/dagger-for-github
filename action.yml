@@ -57,6 +57,10 @@ inputs:
     description: "Whether to write summary to GITHUB_STEP_SUMMARY"
     required: false
     default: "false"
+  cache-binary:
+    description: "Use actions/cache to cache the downloaded dagger binary"
+    required: false
+    default: "false"
 outputs:
   output:
     description: "Job output"
@@ -67,7 +71,17 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: dagger-cache-restore
+      if: inputs.cache-binary == 'true'
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ runner.temp }}/dagger-cache
+        key: dagger-${{ runner.os }}-${{ inputs.version }}-${{ inputs.commit }}
+
     - shell: bash
+      env:
+        CACHE_BINARY: ${{ inputs.cache-binary }}
+        CACHE_HIT: ${{ steps.dagger-cache-restore.outputs.cache-hit }}
       run: |
         set -o pipefail
         # Fallback to /usr/local for backwards compatability
@@ -103,10 +117,36 @@ runs:
           echo "::endgroup::"
         fi
 
+        cache_dir="${RUNNER_TEMP:-/tmp}/dagger-cache"
+        if [[ "$CACHE_BINARY" == "true" && "$CACHE_HIT" == "true" && -x "${cache_dir}/bin/dagger" ]]; then
+          echo "::group::Installing dagger (from cache)"
+          mkdir -p "${prefix_dir}/bin"
+          cp "${cache_dir}/bin/dagger" "${prefix_dir}/bin/dagger"
+          chmod +x "${prefix_dir}/bin/dagger"
+          echo "Restored dagger from cache"
+          echo "::endgroup::"
+          exit 0
+        fi
+
         echo "::group::Installing dagger"
-        curl -fsSL https://dl.dagger.io/dagger/install.sh | \
-        BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        if [[ "$CACHE_BINARY" == "true" ]]; then
+          mkdir -p "${cache_dir}/bin" "${prefix_dir}/bin"
+          curl -fsSL https://dl.dagger.io/dagger/install.sh | \
+          BIN_DIR="${cache_dir}/bin" DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+          cp "${cache_dir}/bin/dagger" "${prefix_dir}/bin/dagger"
+          chmod +x "${prefix_dir}/bin/dagger"
+        else
+          curl -fsSL https://dl.dagger.io/dagger/install.sh | \
+          BIN_DIR=${prefix_dir}/bin DAGGER_VERSION="$VERSION" DAGGER_COMMIT="$COMMIT" sh
+        fi
         echo "::endgroup::"
+
+    - id: dagger-cache-save
+      if: inputs.cache-binary == 'true' && steps.dagger-cache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ runner.temp }}/dagger-cache
+        key: dagger-${{ runner.os }}-${{ inputs.version }}-${{ inputs.commit }}
 
     - id: should-exec
       shell: bash
