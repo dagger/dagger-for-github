@@ -88,7 +88,6 @@ runs:
           # Add 'v' prefix if version doesn't start with 'v' and is not empty
           VERSION="v$VERSION"
         fi
-        latest=$(curl https://dl.dagger.io/dagger/versions/latest)
 
         COMMIT=${{ inputs.commit }}
 
@@ -96,7 +95,11 @@ runs:
           echo "::group::Checking dagger"
           version="$(dagger --silent version | cut --fields 2 --delimiter ' ')"
           echo "Found existing dagger version: $version"
-          if [[ "$version" == "$VERSION" ]] || [[ "$version" == "$latest" ]]; then
+          if [[ -z "$VERSION" ]]; then
+            latest=$(curl -s https://dl.dagger.io/dagger/versions/latest)
+          fi
+          if [[ "$version" == "$VERSION" ]] || \
+             [[ -z "$VERSION" && "$version" == "$latest" ]]; then
             echo "dagger ${version} is already installed, skipping installation"
             exit 0
           fi
