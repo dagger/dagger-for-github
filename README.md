@@ -57,7 +57,7 @@ By setting the version to `latest`, this action will install the latest version 
 
 | Key                             | Description                                                       | Required | Default            |
 | ------------------------------- | ----------------------------------------------------------------- | -------- | ------------------ |
-| `version`                       | Dagger Version. Use semver vX.Y.Z or 'latest'                     | true     | 'latest'           |
+| `version`                       | Dagger Version. Use semver vX.Y.Z or 'latest'                     | false    | 'latest'           |
 | `commit`                        | Dagger Dev Commit (overrides `version`)                           | false    | ''                 |
 | `dagger-flags`                  | Dagger CLI Flags                                                  | false    | '--progress plain' |
 | `verb`                          | CLI verb (call, run, download, up, functions, shell, query)       | false    | 'call'             |
