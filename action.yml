@@ -1,5 +1,5 @@
-name: "Dagger for GitHub"
-description: "Run dagger commands in Github Actions"
+name: "Dagger Action"
+description: "Run dagger commands in GitHub Actions"
 inputs:
   version:
     description: "Dagger Version. Use semver vX.Y.Z or 'latest'"
