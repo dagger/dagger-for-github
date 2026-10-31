@@ -1,4 +1,6 @@
-# GitHub action to run Dagger
+# Dagger Action
+
+A migration bridge to [Dagger for GitHub](https://github.com/apps/dagger-for-github). Run Dagger inside GitHub Actions workflows.
 
 ## Usage Examples
 
@@ -11,8 +13,6 @@
     check: "**"
     version: "latest"  # semver vX.Y.Z
 ```
-
-Note: As a convenience for `dagger check` you can use the [dagger/checks](https://github.com/dagger/checks) action instead.
 
 ### `dagger call`
 
